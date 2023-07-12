@@ -26,6 +26,8 @@ public class MainActivity extends AppCompatActivity {
     TextView txtScan;
     CodeScannerView scanner_view;
 
+    //Hallo
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
