@@ -28,7 +28,14 @@ Button btnSubmit;
 
     @Override
     public void onClick(View view) {
+
+        // Hier wird dann die Berechtigung per DB ausgelesen 1 = Lehrer 0 = Schüler
+
+        int dbGetZugriff = 0;
+
         Intent intent = new Intent(this, ScannerKlasse.class);
+        intent.putExtra("zugriff", dbGetZugriff);
         startActivity(intent);
+
     }
 }

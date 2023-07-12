@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.View;
@@ -24,6 +25,7 @@ public class ScannerKlasse extends AppCompatActivity {
     private CodeScanner mCodeScanner;
     TextView txtScan;
     CodeScannerView scanner_view;
+    int zugriff;
 
     //Hallo
 
@@ -55,6 +57,8 @@ public class ScannerKlasse extends AppCompatActivity {
                     public void run() {
                         Toast.makeText(ScannerKlasse.this, result.getText(), Toast.LENGTH_SHORT).show();
                         txtScan.setText(result.getText());
+                        makeNew();
+
 
                     }
                 });
@@ -66,6 +70,20 @@ public class ScannerKlasse extends AppCompatActivity {
                 mCodeScanner.startPreview();
             }
         });
+    }
+
+    private void makeNew() {
+        Intent intent = getIntent();
+        zugriff = intent.getIntExtra("zugriff", 0);
+
+        if(zugriff == 0){
+
+            Intent newIntent = new Intent(this, StudentView.class);
+            startActivity(newIntent);
+        }else{
+            Intent newIntent = new Intent(this, LeherView.class);
+            startActivity(newIntent);
+        }
     }
 
     @Override
