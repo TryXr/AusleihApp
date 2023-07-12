@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 
 public class login extends AppCompatActivity implements View.OnClickListener {
@@ -29,7 +28,7 @@ Button btnSubmit;
 
     @Override
     public void onClick(View view) {
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, ScannerKlasse.class);
         startActivity(intent);
     }
 }

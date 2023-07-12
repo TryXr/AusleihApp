@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.View;
@@ -20,7 +19,7 @@ import com.budiyev.android.codescanner.ScanMode;
 import com.google.zxing.Result;
 
 
-public class MainActivity extends AppCompatActivity {
+public class ScannerKlasse extends AppCompatActivity {
     private static final int CAMERA_REQUEST_CODE = 101;
     private CodeScanner mCodeScanner;
     TextView txtScan;
@@ -54,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(MainActivity.this, result.getText(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ScannerKlasse.this, result.getText(), Toast.LENGTH_SHORT).show();
                         txtScan.setText(result.getText());
 
                     }
