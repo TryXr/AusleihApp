@@ -59,7 +59,7 @@ public class AusgabeView extends AppCompatActivity {
         try{
             int i = 0;
             while(resultSet.next()){
-                spinnerStudentItems[i] = resultSet.getString("name") + " " + resultSet.getString("firsname");
+                spinnerStudentItems[i] = resultSet.getString("name") + " " + resultSet.getString("firstname");
                 i++;
             }
         }catch (Exception exception){

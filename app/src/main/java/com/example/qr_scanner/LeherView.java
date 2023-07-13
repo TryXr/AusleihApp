@@ -1,14 +1,19 @@
 package com.example.qr_scanner;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 public class LeherView extends AppCompatActivity {
 
+    MySQLStatements stmts = new MySQLStatements();
     private String code;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,7 +26,13 @@ public class LeherView extends AppCompatActivity {
         Button buttonLoeschen = findViewById(R.id.buttonGeraetBuchLoeschen);
         MySQLStatements stmts = new MySQLStatements();
         TextView tvProdukt = findViewById(R.id.tvProdukt);
-        tvProdukt.setText("Das Objekt "+ code + "wurde erkannt!");
+
+        ResultSet result = stmts.performDatabaseOperation("SELECT description FROM leihobjekt WHERE scancode=" + code, 0);
+        try {
+            tvProdukt.setText(result.getString("description"));
+        } catch (Exception e) {
+            Log.e("Error", e.getMessage());
+        }
 
 
         buttonAusgabe.setOnClickListener(new View.OnClickListener() {

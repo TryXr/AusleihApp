@@ -30,8 +30,8 @@ public class MySQLStatements {
             }
 
 
-            resultSet.close();
-            statement.close();
+           //resultSet.close();
+            //statement.close();
             connection.close();
 
         } catch (SQLException e) {

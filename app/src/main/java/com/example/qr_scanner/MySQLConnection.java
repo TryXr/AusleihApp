@@ -17,7 +17,7 @@ import java.sql.Statement;
 
 public class MySQLConnection {
 
-        private static final String URL = "jdbc:mysql://bszw.ddns.net:3306/bfi2124a_digibooks";
+        private static final String URL = "jdbc:mysql://bszw.ddns.net:3306/bfi2124a_digibooks_v2";
         private static final String USERNAME = "bfi2124a";
         private static final String PASSWORD = "geheim";
 
