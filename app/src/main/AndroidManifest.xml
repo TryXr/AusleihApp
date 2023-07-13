@@ -19,6 +19,9 @@
         android:theme="@style/Theme.QR_SCANNER"
         tools:targetApi="31">
         <activity
+            android:name=".AusgabeView"
+            android:exported="false" />
+        <activity
             android:name=".StudentView"
             android:exported="false" />
         <activity
