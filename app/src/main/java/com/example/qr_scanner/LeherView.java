@@ -3,6 +3,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 public class LeherView extends AppCompatActivity {
@@ -18,6 +20,9 @@ public class LeherView extends AppCompatActivity {
         Button buttonNeu = findViewById(R.id.buttonNeuesGeraetBuch);
         Button buttonLoeschen = findViewById(R.id.buttonGeraetBuchLoeschen);
         MySQLStatements stmts = new MySQLStatements();
+        TextView tvProdukt = findViewById(R.id.tvProdukt);
+        tvProdukt.setText("Das Objekt "+ code + "wurde erkannt!");
+
 
         buttonAusgabe.setOnClickListener(new View.OnClickListener() {
             @Override
