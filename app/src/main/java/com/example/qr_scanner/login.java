@@ -30,6 +30,7 @@ Button btnSubmit;
     public void onClick(View view) {
 
         // Hier wird dann die Berechtigung per DB ausgelesen 1 = Lehrer 0 = Schüler
+        MySQLStatements statements = new MySQLStatements();
 
         int dbGetZugriff = 0;
 
