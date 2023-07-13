@@ -32,7 +32,7 @@ Button btnSubmit;
         // Hier wird dann die Berechtigung per DB ausgelesen 1 = Lehrer 0 = Schüler
         MySQLStatements statements = new MySQLStatements();
 
-        int dbGetZugriff = 0;
+        int dbGetZugriff = 1;
 
         Intent intent = new Intent(this, ScannerKlasse.class);
         intent.putExtra("zugriff", dbGetZugriff);

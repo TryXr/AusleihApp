@@ -31,7 +31,7 @@ public class AusgabeView extends AppCompatActivity {
         spinnerClass = findViewById(R.id.spinnerClass);
         spinnerStudent = findViewById(R.id.spinnerStudent);
         cbAll = findViewById(R.id.cbAll);
-        tvAusgabe = findViewById(R.id.tvAuswahl);
+        tvAusgabe = findViewById(R.id.tvAusgabe);
 
         setTxtTitle();
         setSpinnerClass();
