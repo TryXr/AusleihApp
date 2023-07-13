@@ -1,4 +1,5 @@
 package com.example.qr_scanner;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -6,11 +7,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class LeherView extends AppCompatActivity {
 
+    private String code;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_leher_view);
-        String code = getIntent().getStringExtra("code");
+         code = getIntent().getStringExtra("code");
         Button buttonAusgabe = findViewById(R.id.buttonAusgabe);
         Button buttonAnnahme = findViewById(R.id.buttonAnnahme);
         Button buttonNeu = findViewById(R.id.buttonNeuesGeraetBuch);
@@ -21,7 +23,7 @@ public class LeherView extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //Hier folgt die Ausgabe (Datenbank usw.)
-
+                startAusgabe();
             }
         });
 
@@ -47,5 +49,12 @@ public class LeherView extends AppCompatActivity {
                 // //Hier folgt die Austragung von etwas (Datenbank usw.)
             }
         });
+    }
+
+    private void startAusgabe() {
+
+        Intent intent = new Intent(this, AusgabeView.class);
+        intent.putExtra("code", code);
+        startActivity(intent);
     }
 }
