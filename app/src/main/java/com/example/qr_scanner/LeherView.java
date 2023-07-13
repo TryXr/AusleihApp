@@ -10,16 +10,18 @@ public class LeherView extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_leher_view);
-
+        String code = getIntent().getStringExtra("code");
         Button buttonAusgabe = findViewById(R.id.buttonAusgabe);
         Button buttonAnnahme = findViewById(R.id.buttonAnnahme);
         Button buttonNeu = findViewById(R.id.buttonNeuesGeraetBuch);
         Button buttonLoeschen = findViewById(R.id.buttonGeraetBuchLoeschen);
+        MySQLStatements stmts = new MySQLStatements();
 
         buttonAusgabe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //Hier folgt die Ausgabe (Datenbank usw.)
+
             }
         });
 
@@ -34,6 +36,8 @@ public class LeherView extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //Hier folgt die Eintragung von etwas neuem (Datenbank usw.)
+
+                stmts.performDatabaseOperation("INSERT INTO artikel", 2);
             }
         });
 
