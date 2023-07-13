@@ -57,7 +57,7 @@ public class ScannerKlasse extends AppCompatActivity {
                     public void run() {
                         Toast.makeText(ScannerKlasse.this, result.getText(), Toast.LENGTH_SHORT).show();
                         txtScan.setText(result.getText());
-                        makeNew();
+                        makeNew(result.getText());
 
 
                     }
@@ -72,7 +72,7 @@ public class ScannerKlasse extends AppCompatActivity {
         });
     }
 
-    private void makeNew() {
+    private void makeNew(String result) {
         Intent intent = getIntent();
         zugriff = intent.getIntExtra("zugriff", 0);
 
@@ -82,6 +82,7 @@ public class ScannerKlasse extends AppCompatActivity {
             startActivity(newIntent);
         }else{
             Intent newIntent = new Intent(this, LeherView.class);
+            newIntent.putExtra("code", result);
             startActivity(newIntent);
         }
     }
