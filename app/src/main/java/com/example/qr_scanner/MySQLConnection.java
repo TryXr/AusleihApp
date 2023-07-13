@@ -24,6 +24,9 @@ public class MySQLConnection {
 
 
         public static Connection getConnection() throws SQLException {
+
+                StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+                StrictMode.setThreadPolicy(policy);
             return DriverManager.getConnection(URL, USERNAME, PASSWORD);
         }
 
