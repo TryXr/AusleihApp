@@ -61,7 +61,7 @@ public class AusgabeView extends AppCompatActivity {
         }
         setDBAccess();
         try {
-            setSpinnerStudent(connection, statement);
+            //setSpinnerStudent(connection, statement);
         }catch(Exception e){
             Log.e("Error: ",e.getMessage());
         }
@@ -106,6 +106,7 @@ public class AusgabeView extends AppCompatActivity {
             }
                 try {
                     result.close();
+
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
@@ -137,18 +138,18 @@ public class AusgabeView extends AppCompatActivity {
 
         ResultSet result = null;
         ResultSet resultRows = null;
-        resultRows = stmts.performDatabaseOperation("SELECT COUNT('idclass') rows FROM class", 0, connection, statement);
-        result = stmts.performDatabaseOperation("SELECT name, idclass FROM class", 0, connection, statement);
-        String[] spinnerClassItems = new String[resultRows.getInt("rows")];
+        resultRows = stmts.performDatabaseOperation("SELECT COUNT('idclass') anz FROM class", 0, connection, statement);
+
+        String[] spinnerClassItems = null;
 
         try {
-            if (result != null && result.next()) {
+            if (resultRows != null) {
 
                 try {
-                    int i = 0;
-                    while (result.next()) {
-                        spinnerClassItems[i] = result.getString("idclass") + " " + result.getString("name");
-                        i++;
+
+                    while (resultRows.next()) {
+                        spinnerClassItems = new String[resultRows.getInt("anz")];
+
                     }
                 } catch (Exception exception) {
                     Log.e("Error: ", exception.getMessage());
@@ -158,33 +159,60 @@ public class AusgabeView extends AppCompatActivity {
             Log.e("Error", e.getMessage());
         } finally {
             // ResultSet schließen
-            if (result != null) {
+            if (resultRows != null) {
                 try {
-                    result.close();
+                    resultRows.close();
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
             }
+            result = stmts.performDatabaseOperation("SELECT name, idclass FROM class", 0, connection, statement);
+            try {
+                if (result != null) {
 
-            if (statement != null) {
-                try {
-                    statement.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
+                    try {
+                        int i = 0;
+                        while (result.next()) {
+                            spinnerClassItems[i] = result.getString("idclass") + " " + result.getString("name");
+                            i++;
+                        }
+                    } catch (Exception exception) {
+                        Log.e("Error: ", exception.getMessage());
+                    }
                 }
-            }
-            if (connection != null) {
-                try {
-                    connection.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
+            } catch (Exception e) {
+                Log.e("Error", e.getMessage());
+            } finally {
+                // ResultSet schließen
+                if (result != null) {
+                    try {
+                        result.close();
+                        resultRows.close();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
                 }
+
+                if (statement != null) {
+                    try {
+                        statement.close();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if (connection != null) {
+                    try {
+                        connection.close();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, spinnerClassItems);
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                spinnerClass.setAdapter(adapter);
             }
-
-
-            ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, spinnerClassItems);
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            spinnerClass.setAdapter(adapter);
         }
     }
 
