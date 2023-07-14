@@ -13,35 +13,27 @@ public class MySQLStatements {
 
     }
 
-    public ResultSet performDatabaseOperation(String sql, int zgr) {
+    public ResultSet performDatabaseOperation(String sql, int zgr, Connection connection, Statement statement) {
 
 
         ResultSet resultSet = null;
 
         try {
-            Connection connection = MySQLConnection.getConnection();
-            Statement statement = connection.createStatement();
-
-
             // Select
             if(zgr == 0){
                 resultSet = statement.executeQuery(sql);
+
             }
 
             // Insert
             if(zgr == 1){
                int zeilen = statement.executeUpdate(sql);
             }
-
-
-            resultSet.close();
-            statement.close();
-            connection.close();
+            //statement.close();
+            //connection.close();
 
         } catch (SQLException e) {
             e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
         }
 
         return  resultSet;

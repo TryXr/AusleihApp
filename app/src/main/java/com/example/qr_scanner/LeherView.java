@@ -8,8 +8,10 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 
 public class LeherView extends AppCompatActivity {
@@ -29,14 +31,51 @@ public class LeherView extends AppCompatActivity {
         MySQLStatements stmts = new MySQLStatements();
         TextView tvProdukt = findViewById(R.id.tvProdukt);
 
+        Connection connection = null;
+        Statement statement = null;
+        try {
+            connection = MySQLConnection.getConnection();
+            statement = connection.createStatement();
 
-         ResultSet result = stmts.performDatabaseOperation("SELECT description FROM leihobjekt WHERE scancode=" + code, 0);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
+        ResultSet result = stmts.performDatabaseOperation("SELECT description FROM leihobjekt WHERE scancode=" + code, 0, connection, statement);
 
         try {
-            if(!result.isClosed())
-            tvProdukt.setText(result.getString("description").toString());
+            if (result != null && result.next()) {
+                String description = result.getString("description");
+            tvProdukt.setText(description);
+            }
         } catch (Exception e) {
             Log.e("Error", e.getMessage());
+        }finally {
+            // ResultSet schließen
+            if (result != null) {
+                try {
+                    result.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
         }
 
 

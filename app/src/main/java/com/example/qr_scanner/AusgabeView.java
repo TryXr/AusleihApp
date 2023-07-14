@@ -55,7 +55,7 @@ public class AusgabeView extends AppCompatActivity {
         String[] klasseid = klasse.split(" ");
 
         ResultSet resultSet = null;
-        resultSet = stmts.performDatabaseOperation("SELECT name, firstname FROM class WHERE classid=" + klasseid[0], 0);
+        //resultSet = stmts.performDatabaseOperation("SELECT name, firstname FROM class WHERE classid=" + klasseid[0], 0);
 
         try{
             int i = 0;
@@ -77,7 +77,7 @@ public class AusgabeView extends AppCompatActivity {
         String[] spinnerClassItems = null;
 
         ResultSet resultSet = null;
-        resultSet = stmts.performDatabaseOperation("SELECT name, idclass FROM class", 0);
+        //resultSet = stmts.performDatabaseOperation("SELECT name, idclass FROM class", 0);
 
         try{
             int i = 0;
@@ -97,7 +97,7 @@ public class AusgabeView extends AppCompatActivity {
 
     private void setTxtTitle() {
         ResultSet result = null;
-        result = stmts.performDatabaseOperation("SELECT description FROM leihobjekt WHERE scancode =" + code, 0);
+        //result = stmts.performDatabaseOperation("SELECT description FROM leihobjekt WHERE scancode =" + code, 0);
 
         try {
             String desc = result.getString("description");
