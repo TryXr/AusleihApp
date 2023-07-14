@@ -23,7 +23,7 @@ public class MySQLConnection {
 
 
 
-        public static Connection getConnection() throws SQLException {
+        public static Connection getConnection() throws SQLException, ClassNotFoundException {
 
                 StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
                 StrictMode.setThreadPolicy(policy);

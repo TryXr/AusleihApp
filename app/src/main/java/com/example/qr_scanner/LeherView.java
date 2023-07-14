@@ -10,11 +10,13 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class LeherView extends AppCompatActivity {
 
     MySQLStatements stmts = new MySQLStatements();
     private String code;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,9 +29,12 @@ public class LeherView extends AppCompatActivity {
         MySQLStatements stmts = new MySQLStatements();
         TextView tvProdukt = findViewById(R.id.tvProdukt);
 
-        ResultSet result = stmts.performDatabaseOperation("SELECT description FROM leihobjekt WHERE scancode=" + code, 0);
+
+         ResultSet result = stmts.performDatabaseOperation("SELECT description FROM leihobjekt WHERE scancode=" + code, 0);
+
         try {
-            tvProdukt.setText(result.getString("description"));
+            if(!result.isClosed())
+            tvProdukt.setText(result.getString("description").toString());
         } catch (Exception e) {
             Log.e("Error", e.getMessage());
         }
@@ -55,7 +60,7 @@ public class LeherView extends AppCompatActivity {
             public void onClick(View v) {
                 //Hier folgt die Eintragung von etwas neuem (Datenbank usw.)
 
-                stmts.performDatabaseOperation("INSERT INTO artikel", 2);
+                //stmts.performDatabaseOperation("INSERT INTO artikel", 2);
             }
         });
 

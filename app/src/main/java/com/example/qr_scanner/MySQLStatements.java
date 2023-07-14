@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MySQLStatements {
 
@@ -13,11 +15,13 @@ public class MySQLStatements {
 
     public ResultSet performDatabaseOperation(String sql, int zgr) {
 
+
         ResultSet resultSet = null;
 
         try {
             Connection connection = MySQLConnection.getConnection();
             Statement statement = connection.createStatement();
+
 
             // Select
             if(zgr == 0){
@@ -30,14 +34,18 @@ public class MySQLStatements {
             }
 
 
-           //resultSet.close();
-            //statement.close();
+            resultSet.close();
+            statement.close();
             connection.close();
 
         } catch (SQLException e) {
             e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
 
         return  resultSet;
     }
+
+
 }
