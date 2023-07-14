@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/main_background">
@@ -17,102 +18,108 @@
 
         <TextView
             android:id="@+id/tvAusgabe"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="0sp"
             android:layout_marginVertical="5dp"
             android:text="Test"
             android:textSize="20sp"
             android:textStyle="bold"
             android:gravity="center_vertical"
-            app:layout_constraintBottom_toTopOf="@id/tvClass"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
+            android:textAlignment="center"
+            app:layout_constraintBottom_toTopOf="@id/tabelle"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_chainStyle="spread_inside"
-            app:layout_constraintVertical_weight="2"
-            />
-
-        <TextView
-            android:id="@+id/tvClass"
-            android:layout_width="wrap_content"
-            android:layout_height="0sp"
-            android:layout_marginTop="5dp"
-            android:text="Klasse"
-            android:textSize="15sp"
-            android:textStyle="bold"
-            android:gravity="center_vertical"
-            app:layout_constraintBottom_toTopOf="@id/spinnerClass"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvAusgabe"
-            app:layout_constraintVertical_weight="1"/>
-
-        <Spinner
-            android:id="@+id/spinnerClass"
-            android:layout_width="wrap_content"
-            android:layout_height="0sp"
-            android:layout_marginBottom="5dp"
-            android:gravity="center_vertical"
-            app:layout_constraintBottom_toTopOf="@id/tvAll"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvClass"
-            app:layout_constraintVertical_weight="1"/>
-
-        <TextView
-            android:id="@+id/tvAll"
-            android:layout_width="wrap_content"
-            android:layout_height="0sp"
-            android:layout_marginTop="5dp"
-            android:text="Alle Schüler"
-            android:textSize="15sp"
-            android:textStyle="bold"
-            android:gravity="center_vertical"
-            app:layout_constraintBottom_toTopOf="@id/cbAll"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/spinnerClass"
-            app:layout_constraintVertical_weight="1"/>
-
-        <CheckBox
-            android:id="@+id/cbAll"
-            android:layout_width="wrap_content"
-            android:layout_height="0sp"
-            android:layout_marginBottom="5dp"
-            android:checked="false"
-            android:gravity="center_vertical"
-            app:layout_constraintBottom_toTopOf="@id/tvStudent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvAll"
-            app:layout_constraintVertical_weight="1"/>
-
-        <TextView
-            android:id="@+id/tvStudent"
-            android:layout_width="wrap_content"
-            android:layout_height="0sp"
-            android:layout_marginTop="5dp"
-            android:text="Schüler"
-            android:textSize="15sp"
-            android:textStyle="bold"
-            android:gravity="center_vertical"
-            app:layout_constraintBottom_toTopOf="@id/spinnerStudent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/cbAll"
-            app:layout_constraintVertical_weight="1"/>
-
-        <Spinner
-            android:id="@+id/spinnerStudent"
-            android:layout_width="wrap_content"
-            android:layout_height="0sp"
-            android:gravity="center_vertical"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvStudent"
             app:layout_constraintVertical_weight="1"
-            android:layout_marginBottom="5dp"/>
+            tools:ignore="RtlCompat" />
+
+        <TableLayout
+            android:id="@+id/tabelle"
+            android:layout_width="match_parent"
+            android:layout_height="0sp"
+            app:layout_constraintTop_toBottomOf="@id/tvAusgabe"
+            android:layout_marginHorizontal="30dp"
+            app:layout_constraintVertical_chainStyle="spread_inside"
+            app:layout_constraintVertical_weight="2">
+
+            <TableRow>
+                <TextView
+                    android:id="@+id/tvClass"
+                    android:layout_width="0dp"
+                    android:layout_height="20dp"
+                    android:text="Klasse:"
+                    android:layout_marginVertical="20dp"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    android:gravity="center_vertical"
+                    android:layout_weight="1" />
+
+                <Spinner
+                    android:id="@+id/spinnerClass"
+                    android:layout_width="0dp"
+                    android:layout_marginVertical="20dp"
+                    android:layout_height="20dp"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical" />
+            </TableRow>
+
+            <TableRow>
+                <TextView
+                    android:id="@+id/tvAll"
+                    android:layout_width="0dp"
+                    android:layout_height="20dp"
+                    android:text="Alle:"
+                    android:layout_marginVertical="20dp"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    android:gravity="center_vertical"
+                    android:layout_weight="1"
+                    />
+
+                <CheckBox
+                    android:id="@+id/cbAll"
+                    android:layout_width="0dp"
+                    android:layout_marginVertical="20dp"
+                    android:layout_height="20dp"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical" />
+            </TableRow>
+
+            <TableRow>
+
+                <TextView
+                    android:id="@+id/tvStudent"
+                    android:layout_width="0dp"
+                    android:layout_height="20dp"
+                    android:layout_marginVertical="20dp"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:text="Schüler:"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <Spinner
+                    android:id="@+id/spinnerStudent"
+                    android:layout_width="0dp"
+                    android:layout_marginVertical="20dp"
+                    android:layout_height="20dp"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical" />
+            </TableRow>
+
+        </TableLayout>
+
+        <Button
+            android:id="@+id/buttonAusgabe"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="30dp"
+            android:text="Ausgabe"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tabelle"
+            app:layout_constraintVertical_chainStyle="spread_inside"
+            app:layout_constraintVertical_weight="1"
+            android:textColor="@color/black"
+            android:backgroundTint="@color/other_blue"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
