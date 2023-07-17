@@ -83,14 +83,14 @@ public class AusgabeView extends AppCompatActivity {
         String[] klasseid = klasse.split(" ");
 
         ResultSet result = null;
-        result = stmts.performDatabaseOperation("SELECT name, firstname FROM class WHERE classid=" + klasseid[0], 0, connection, statement);
+        result = stmts.performDatabaseOperation("SELECT lastname, firstname FROM class WHERE classid=" + klasseid[0], 0, connection, statement);
         try {
             if (result != null && result.next()) {
 
                 try{
                     int i = 0;
                     while(result.next()){
-                        spinnerStudentItems[i] = result.getString("name") + " " + result.getString("firstname");
+                        spinnerStudentItems[i] = result.getString("lastname") + " " + result.getString("firstname");
                         i++;
                     }
                 }catch (Exception exception){
@@ -166,14 +166,14 @@ public class AusgabeView extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }
-            result = stmts.performDatabaseOperation("SELECT name, idclass FROM class", 0, connection, statement);
+            result = stmts.performDatabaseOperation("SELECT title, idclass FROM class", 0, connection, statement);
             try {
                 if (result != null) {
 
                     try {
                         int i = 0;
                         while (result.next()) {
-                            spinnerClassItems[i] = result.getString("idclass") + " " + result.getString("name");
+                            spinnerClassItems[i] = result.getString("idclass") + " " + result.getString("title");
                             i++;
                         }
                     } catch (Exception exception) {

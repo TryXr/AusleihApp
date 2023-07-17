@@ -89,6 +89,7 @@ public class LeherView extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //Hier folgt die Annahme (Datenbank usw.)
+                startAnnahme();
             }
         });
 
@@ -112,6 +113,13 @@ public class LeherView extends AppCompatActivity {
     private void startAusgabe() {
 
         Intent intent = new Intent(this, AusgabeView.class);
+        intent.putExtra("code", code);
+        startActivity(intent);
+    }
+
+    private void startAnnahme() {
+
+        Intent intent = new Intent(this, AnnahmeView.class);
         intent.putExtra("code", code);
         startActivity(intent);
     }
