@@ -317,7 +317,7 @@ try {
                 }
             }
         }
-        //asdfasdf
+
         private void setDBAccess () {
             try {
                 connection = MySQLConnection.getConnection();
