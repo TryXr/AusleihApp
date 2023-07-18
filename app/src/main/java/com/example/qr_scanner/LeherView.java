@@ -97,7 +97,7 @@ public class LeherView extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //Hier folgt die Eintragung von etwas neuem (Datenbank usw.)
-
+                startNewObject();
                 //stmts.performDatabaseOperation("INSERT INTO artikel", 2);
             }
         });
@@ -121,6 +121,13 @@ public class LeherView extends AppCompatActivity {
     private void startAnnahme() {
 
         Intent intent = new Intent(this, AnnahmeView.class);
+        intent.putExtra("code", code);
+        startActivity(intent);
+    }
+
+    private void startNewObject() {
+
+        Intent intent = new Intent(this, NewObjectView.class);
         intent.putExtra("code", code);
         startActivity(intent);
     }
