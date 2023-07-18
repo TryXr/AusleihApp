@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.Spinner;
@@ -18,7 +19,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class AusgabeView extends AppCompatActivity {
+public class AusgabeView extends AppCompatActivity implements View.OnClickListener {
 
     String code;
     Spinner spinnerClass, spinnerStudent;
@@ -27,6 +28,7 @@ public class AusgabeView extends AppCompatActivity {
     MySQLStatements stmts = new MySQLStatements();
     Connection connection = null;
     Statement statement = null;
+    Button btnSubmit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +42,7 @@ public class AusgabeView extends AppCompatActivity {
         cbAll = findViewById(R.id.cbAll);
         tvAusgabe = findViewById(R.id.tvAusgabe);
         tvStudent = findViewById(R.id.tvStudent);
+        btnSubmit = findViewById(R.id.buttonAusgabe);
         cbAll.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -54,9 +57,11 @@ public class AusgabeView extends AppCompatActivity {
             }
         });
 
+        btnSubmit.setOnClickListener(this);
 
 
-
+        setDBAccess();
+        setTxtTitle(connection, statement);
         setDBAccess();
         try {
             setSpinnerClass(connection, statement);
@@ -87,7 +92,7 @@ try {
     Log.e("Error: ", e.getMessage());
 }
 
-        //setTxtTitle(connection, statement);
+
         //setSpinnerClass(connection, statement);
 
 
@@ -269,11 +274,43 @@ try {
             result = stmts.performDatabaseOperation("SELECT description FROM leihobjekt WHERE scancode =" + code, 0, connection, statement);
 
             try {
-                String desc = result.getString("description");
-                tvAusgabe.setText(desc);
+                if(result != null) {
+                    try {
+                        if(result.next()){
+                            String desc = result.getString("description");
+                            tvAusgabe.setText(desc);
+                        }
 
+                    }catch (Exception e){
+                        Log.e("Error: ", e.getMessage());
+                    }
+                }
             } catch (Exception e) {
                 Log.e("Error: ", e.getMessage());
+            }finally {
+                // ResultSet schließen
+                if (result != null) {
+                    try {
+                        result.close();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                if (statement != null) {
+                    try {
+                        statement.close();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if (connection != null) {
+                    try {
+                        connection.close();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
         }
 
@@ -286,4 +323,9 @@ try {
                 throw new RuntimeException(e);
             }
         }
+
+    @Override
+    public void onClick(View v) {
+        setDBAccess();
     }
+}
