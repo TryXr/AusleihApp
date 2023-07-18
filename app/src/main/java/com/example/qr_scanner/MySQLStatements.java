@@ -27,7 +27,7 @@ public class MySQLStatements {
 
             // Insert
             if(zgr == 1){
-               int zeilen = statement.executeUpdate(sql);
+              resultSet = statement.executeQuery(sql);
             }
             //statement.close();
             //connection.close();

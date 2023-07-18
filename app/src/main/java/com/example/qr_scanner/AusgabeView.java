@@ -339,7 +339,7 @@ try {
         String currentTimeStamp =  new SimpleDateFormat("yyyy-MM-dd HH.mm.ss").format(new java.util.Date()).toString();
 
         ResultSet result = null;
-        result = stmts.performDatabaseOperation("INSERT INTO borrowed VALUES(" + tid + stundentselect + leihselect + ", 0, " + currentTimeStamp , 0, connection, statement);
+        result = stmts.performDatabaseOperation("INSERT INTO borrowed VALUES(" + tid + stundentselect + leihselect + ", 0, " + currentTimeStamp , 1, connection, statement);
 
         try {
             if(result != null) {

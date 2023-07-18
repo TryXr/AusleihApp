@@ -39,12 +39,12 @@ MySQLStatements stmts = new MySQLStatements();
 
         // Hier wird dann die Berechtigung per DB ausgelesen 1 = Lehrer 0 = Schüler
         MySQLStatements statements = new MySQLStatements();
-
+        setDBAccess();
         int dbGetZugriff = 1;
 
         ResultSet result = null;
 
-        result = stmts.performDatabaseOperation("SELECT * FROM user WHERE username =" + txtBname.getText().toString() + "AND password=" +txtPwd.getText().toString(), 0, connection, statement);
+        result = stmts.performDatabaseOperation("SELECT * FROM user WHERE username ='" + txtBname.getText().toString() + "' AND password='" +txtPwd.getText().toString() + "'", 0, connection, statement);
 
         try {
             if(result != null) {
@@ -90,5 +90,14 @@ MySQLStatements stmts = new MySQLStatements();
 
 
 
+    }
+    private void setDBAccess () {
+        try {
+            connection = MySQLConnection.getConnection();
+            statement = connection.createStatement();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
