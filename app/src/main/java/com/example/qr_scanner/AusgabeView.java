@@ -101,7 +101,7 @@ try {
         ResultSet result = null;
         ResultSet resultRows = null;
 
-        resultRows = stmts.performDatabaseOperation("SELECT COUNT('idstudent') anz FROM student", 0, connection, statement);
+        resultRows = stmts.performDatabaseOperation("SELECT COUNT('idstudent') anz FROM student WHERE idclass=" + klasseid[0], 0, connection, statement);
 
         String[] spinnerStudentItems = null;
 
@@ -131,7 +131,7 @@ try {
             }
 
 
-            result = stmts.performDatabaseOperation("SELECT lastname, firstname FROM stundent WHERE idclass=" + klasseid, 0, connection, statement);
+            result = stmts.performDatabaseOperation("SELECT lastname, firstname FROM student WHERE idclass=" + klasseid[0], 0, connection, statement);
             try {
                 if (result != null && result.next()) {
 
