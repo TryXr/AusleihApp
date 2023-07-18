@@ -334,12 +334,12 @@ try {
         String student = (String) spinnerStudent.getSelectedItem();
         String[] students = student.split(" ");
         String tid = getIntent().getStringExtra("teacherid");
-        String stundentselect = ", (SELECT studentid FROM student WHERE lastname=" + students[0] + " AND firstname=" + students[1] + ")";
-        String leihselect =  ", (SELECT idleihobjekt FROM leihobjekt WHERE description =" + desc + ")";
-        String currentTimeStamp =  new SimpleDateFormat("yyyy-MM-dd HH.mm.ss").format(new java.util.Date()).toString();
+        String stundentselect = ", (SELECT studentid FROM student WHERE lastname='" + students[0] +"'" + " AND firstname='" + students[1] + "')";
+        String leihselect =  ", (SELECT idleihobjekt FROM leihobjekt WHERE description ='" + desc + "')";
+        String currentTimeStamp =  new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new java.util.Date()).toString();
 
         ResultSet result = null;
-        result = stmts.performDatabaseOperation("INSERT INTO borrowed VALUES(" + tid + stundentselect + leihselect + ", 0, " + currentTimeStamp , 1, connection, statement);
+        result = stmts.performDatabaseOperation("INSERT INTO borrowed VALUES("+ "null" + tid + stundentselect + leihselect + ", 0, " + "'" + currentTimeStamp + "'" , 1, connection, statement);
 
         try {
             if(result != null) {
