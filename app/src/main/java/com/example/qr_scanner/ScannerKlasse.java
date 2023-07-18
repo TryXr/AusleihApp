@@ -55,7 +55,7 @@ public class ScannerKlasse extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(ScannerKlasse.this, result.getText(), Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(ScannerKlasse.this, result.getText(), Toast.LENGTH_SHORT).show();
                         txtScan.setText(result.getText());
                         makeNew(result.getText());
 
