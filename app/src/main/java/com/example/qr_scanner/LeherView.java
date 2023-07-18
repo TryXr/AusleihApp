@@ -23,7 +23,7 @@ public class LeherView extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_leher_view);
-         code = getIntent().getStringExtra("code");
+        code = getIntent().getStringExtra("code");
         Button buttonAusgabe = findViewById(R.id.buttonAusgabe);
         Button buttonAnnahme = findViewById(R.id.buttonAnnahme);
         Button buttonNeu = findViewById(R.id.buttonNeuesGeraetBuch);
