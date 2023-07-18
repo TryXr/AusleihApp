@@ -83,6 +83,7 @@ public class ScannerKlasse extends AppCompatActivity {
         }else{
             Intent newIntent = new Intent(this, LeherView.class);
             newIntent.putExtra("code", result);
+            newIntent.putExtra("teacherid", getIntent().getStringExtra("teacherid"));
             startActivity(newIntent);
         }
     }

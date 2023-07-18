@@ -113,6 +113,7 @@ public class LeherView extends AppCompatActivity {
     private void startAusgabe() {
 
         Intent intent = new Intent(this, AusgabeView.class);
+        intent.putExtra("teacherid", getIntent().getStringExtra("teacherid"));
         intent.putExtra("code", code);
         startActivity(intent);
     }

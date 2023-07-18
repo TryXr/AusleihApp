@@ -13,11 +13,14 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 
 public class AusgabeView extends AppCompatActivity implements View.OnClickListener {
 
@@ -29,6 +32,7 @@ public class AusgabeView extends AppCompatActivity implements View.OnClickListen
     Connection connection = null;
     Statement statement = null;
     Button btnSubmit;
+    String desc = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -277,7 +281,7 @@ try {
                 if(result != null) {
                     try {
                         if(result.next()){
-                            String desc = result.getString("description");
+                            desc = result.getString("description");
                             tvAusgabe.setText(desc);
                         }
 
@@ -327,5 +331,50 @@ try {
     @Override
     public void onClick(View v) {
         setDBAccess();
+        String student = (String) spinnerStudent.getSelectedItem();
+        String[] students = student.split(" ");
+        String tid = getIntent().getStringExtra("teacherid");
+        String stundentselect = ", (SELECT studentid FROM student WHERE lastname=" + students[0] + " AND firstname=" + students[1] + ")";
+        String leihselect =  ", (SELECT idleihobjekt FROM leihobjekt WHERE description =" + desc + ")";
+        String currentTimeStamp =  new SimpleDateFormat("yyyy-MM-dd HH.mm.ss").format(new java.util.Date()).toString();
+
+        ResultSet result = null;
+        result = stmts.performDatabaseOperation("INSERT INTO borrowed VALUES(" + tid + stundentselect + leihselect + ", 0, " + currentTimeStamp , 0, connection, statement);
+
+        try {
+            if(result != null) {
+                try {
+                    Toast.makeText(this, "Ausleihe wurde in der Datenbank hinzugefügt", Toast.LENGTH_SHORT);
+                }catch (Exception e){
+                    Log.e("Error: ", e.getMessage());
+                }
+            }
+        } catch (Exception e) {
+            Log.e("Error: ", e.getMessage());
+        }finally {
+            // ResultSet schließen
+            if (result != null) {
+                try {
+                    result.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 }
