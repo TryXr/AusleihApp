@@ -129,7 +129,7 @@ try {
                     e.printStackTrace();
                 }
             }
-
+            //ahsdfasdf
 
             result = stmts.performDatabaseOperation("SELECT lastname, firstname FROM student WHERE idclass=" + klasseid[0], 0, connection, statement);
             try {
