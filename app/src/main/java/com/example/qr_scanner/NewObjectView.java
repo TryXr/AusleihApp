@@ -189,7 +189,7 @@ public class NewObjectView extends AppCompatActivity implements View.OnClickList
 
             try {
                 stmts.performDatabaseOperation("INSERT INTO leihobjekt VALUES("+ "null"+ ", " + code + ", " + "'"  + etDescription.getText().toString() + "'" + ", " + qnty + ", " + categorys[0] + ")" , 1, connection, statement);
-                Toast.makeText(this, "Ausleihe wurde in der Datenbank hinzugefügt", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Neue Medien wurden in der Datenbank hinzugefügt", Toast.LENGTH_SHORT).show();
             } catch (Exception e) {
                 Log.e("Error: ", e.getMessage());
             }finally {
