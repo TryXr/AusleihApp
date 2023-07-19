@@ -1,4 +1,5 @@
 package com.example.qr_scanner;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -6,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.sql.Connection;
@@ -105,7 +107,7 @@ public class LeherView extends AppCompatActivity {
         buttonLoeschen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // //Hier folgt die Austragung von etwas (Datenbank usw.)
+                showMessageDialog();
             }
         });
     }
@@ -132,4 +134,26 @@ public class LeherView extends AppCompatActivity {
         intent.putExtra("code", code);
         startActivity(intent);
     }
+
+    private void showMessageDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Löschen"); // Set the title of the dialog (optional)
+
+        // Set the message you want to display
+        builder.setMessage("Wollen Sie das gescannte Objekt wirklich entfernen?");
+
+        // Set a button for the user to dismiss the dialog (OK button)
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+
+
+                dialog.dismiss(); // Close the dialog
+            }
+        });
+
+        // Create and show the dialog
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
 }
