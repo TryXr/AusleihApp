@@ -43,7 +43,7 @@
             app:layout_constraintVertical_chainStyle="spread_inside"
             app:layout_constraintVertical_weight="2">
 
-            <TableRow android:layout_marginVertical="15dp">
+            <TableRow android:layout_marginVertical="10dp">
                 <TextView
                     android:id="@+id/tvDes"
                     android:layout_width="0dp"
@@ -63,7 +63,7 @@
                     />
             </TableRow>
 
-            <TableRow android:layout_marginVertical="15dp">
+            <TableRow android:layout_marginVertical="10dp">
                 <TextView
                     android:id="@+id/tvSpinnerCat"
                     android:layout_width="0dp"
@@ -83,7 +83,7 @@
                     />
             </TableRow>
 
-            <TableRow android:layout_marginVertical="15dp">
+            <TableRow android:layout_marginVertical="10dp">
 
                 <TextView
                     android:id="@+id/tvQuan"

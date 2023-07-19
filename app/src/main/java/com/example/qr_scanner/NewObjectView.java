@@ -65,13 +65,7 @@ public class NewObjectView extends AppCompatActivity implements View.OnClickList
                 spinnerCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                        setDBAccess();
-                        try {
-                            String category = (String) parent.getSelectedItem();
-                            setSpinnerCategory(connection, statement);
-                        } catch (Exception e) {
-                            Log.e("Error: ", e.getMessage());
-                        }
+
                     }
 
                     @Override
@@ -85,7 +79,6 @@ public class NewObjectView extends AppCompatActivity implements View.OnClickList
             }
 
 
-            //setSpinnerClass(connection, statement);
 
 
         }
