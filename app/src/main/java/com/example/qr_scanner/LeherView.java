@@ -21,6 +21,8 @@ public class LeherView extends AppCompatActivity {
     MySQLStatements stmts = new MySQLStatements();
     private String code;
 
+    Statement statement;
+    Connection connection;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +51,8 @@ public class LeherView extends AppCompatActivity {
             if (result != null && result.next()) {
                 String description = result.getString("description");
             tvProdukt.setText(description);
+            }else{
+                startNewObject();
             }
         } catch (Exception e) {
             Log.e("Error", e.getMessage());
@@ -143,17 +147,32 @@ public class LeherView extends AppCompatActivity {
         builder.setMessage("Wollen Sie das gescannte Objekt wirklich entfernen?");
 
         // Set a button for the user to dismiss the dialog (OK button)
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton("Ja", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-
-
+                setDBAccess();
+                stmts.performDatabaseOperation("DELETE FROM leihobjekt WHERE scancode=" + code, 1, connection, statement);
                 dialog.dismiss(); // Close the dialog
             }
         });
-
+        builder.setNegativeButton("Nein", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
         // Create and show the dialog
         AlertDialog dialog = builder.create();
         dialog.show();
+    }
+
+    private void setDBAccess () {
+        try {
+            connection = MySQLConnection.getConnection();
+            statement = connection.createStatement();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }
