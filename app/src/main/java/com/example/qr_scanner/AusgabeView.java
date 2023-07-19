@@ -431,8 +431,10 @@ public class AusgabeView extends AppCompatActivity implements View.OnClickListen
                 try {
                     try {
                         for (int i = 0; i < studentLength.length; i++) {
-                            stmts.performDatabaseOperation("INSERT INTO borrowed VALUES(" + "null" + ", " + tid + studentLength[i] + leihselect + ", 0, " + "'" + currentTimeStamp + "')", 1, connection, statement);
+                            String sid = studentLength[i];
+                            stmts.performDatabaseOperation("INSERT INTO borrowed VALUES(" + "null" + ", " + tid + ", " + sid + leihselect + ", 0, " + "'" + currentTimeStamp + "')", 1, connection, statement);
                         }
+                        Toast.makeText(this, "Ausleihe wurde für die Klasse hinzugefügt", Toast.LENGTH_SHORT).show();
                     } catch (Exception exception) {
                         Log.e("Error: ", exception.getMessage());
                     }
