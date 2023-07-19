@@ -34,7 +34,8 @@ public class AusgabeView extends AppCompatActivity implements View.OnClickListen
     Statement statement = null;
     Button btnSubmit;
     String desc = "";
-
+    Boolean isAll = false;
+    String klasse = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,10 +55,12 @@ public class AusgabeView extends AppCompatActivity implements View.OnClickListen
                 if (cbAll.isChecked()) {
                     spinnerStudent.setVisibility(View.INVISIBLE);
                     tvStudent.setVisibility(View.INVISIBLE);
+                    isAll = true;
 
                 } else {
                     spinnerStudent.setVisibility(View.VISIBLE);
                     tvStudent.setVisibility(View.VISIBLE);
+                    isAll = false;
                 }
             }
         });
@@ -74,28 +77,28 @@ public class AusgabeView extends AppCompatActivity implements View.OnClickListen
             Log.e("Error: ", e.getMessage());
         }
 
-try {
-    spinnerClass.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-        @Override
-        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-            setDBAccess();
-            try {
-                String klasse = (String) parent.getSelectedItem();
-                setSpinnerStudent(connection, statement, klasse);
-            } catch (Exception e) {
-                Log.e("Error: ", e.getMessage());
-            }
-        }
+        try {
+            spinnerClass.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    setDBAccess();
+                    try {
+                         klasse = (String) parent.getSelectedItem();
+                        setSpinnerStudent(connection, statement, klasse);
+                    } catch (Exception e) {
+                        Log.e("Error: ", e.getMessage());
+                    }
+                }
 
-        @Override
-        public void onNothingSelected(AdapterView<?> parent) {
-            return;
-        }
-    });
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+                    return;
+                }
+            });
 
-}catch (Exception e){
-    Log.e("Error: ", e.getMessage());
-}
+        } catch (Exception e) {
+            Log.e("Error: ", e.getMessage());
+        }
 
 
         //setSpinnerClass(connection, statement);
@@ -186,28 +189,53 @@ try {
             }
 
         }
-            ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, spinnerStudentItems);
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            spinnerStudent.setAdapter(adapter);
-        }
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, spinnerStudentItems);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerStudent.setAdapter(adapter);
+    }
 
-        private void setSpinnerClass (Connection connection, Statement statement) throws
-        SQLException {
+    private void setSpinnerClass(Connection connection, Statement statement) throws
+            SQLException {
 
-            ResultSet result = null;
-            ResultSet resultRows = null;
-            resultRows = stmts.performDatabaseOperation("SELECT COUNT('idclass') anz FROM class", 0, connection, statement);
+        ResultSet result = null;
+        ResultSet resultRows = null;
+        resultRows = stmts.performDatabaseOperation("SELECT COUNT('idclass') anz FROM class", 0, connection, statement);
 
-            String[] spinnerClassItems = null;
+        String[] spinnerClassItems = null;
 
+        try {
+            if (resultRows != null) {
+
+                try {
+
+                    while (resultRows.next()) {
+                        spinnerClassItems = new String[resultRows.getInt("anz")];
+
+                    }
+                } catch (Exception exception) {
+                    Log.e("Error: ", exception.getMessage());
+                }
+            }
+        } catch (Exception e) {
+            Log.e("Error", e.getMessage());
+        } finally {
+            // ResultSet schließen
+            if (resultRows != null) {
+                try {
+                    resultRows.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            result = stmts.performDatabaseOperation("SELECT title, idclass FROM class", 0, connection, statement);
             try {
-                if (resultRows != null) {
+                if (result != null) {
 
                     try {
-
-                        while (resultRows.next()) {
-                            spinnerClassItems = new String[resultRows.getInt("anz")];
-
+                        int i = 0;
+                        while (result.next()) {
+                            spinnerClassItems[i] = result.getString("idclass") + " " + result.getString("title");
+                            i++;
                         }
                     } catch (Exception exception) {
                         Log.e("Error: ", exception.getMessage());
@@ -217,86 +245,10 @@ try {
                 Log.e("Error", e.getMessage());
             } finally {
                 // ResultSet schließen
-                if (resultRows != null) {
-                    try {
-                        resultRows.close();
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    }
-                }
-                result = stmts.performDatabaseOperation("SELECT title, idclass FROM class", 0, connection, statement);
-                try {
-                    if (result != null) {
-
-                        try {
-                            int i = 0;
-                            while (result.next()) {
-                                spinnerClassItems[i] = result.getString("idclass") + " " + result.getString("title");
-                                i++;
-                            }
-                        } catch (Exception exception) {
-                            Log.e("Error: ", exception.getMessage());
-                        }
-                    }
-                } catch (Exception e) {
-                    Log.e("Error", e.getMessage());
-                } finally {
-                    // ResultSet schließen
-                    if (result != null) {
-                        try {
-                            result.close();
-                            resultRows.close();
-                        } catch (SQLException e) {
-                            e.printStackTrace();
-                        }
-                    }
-
-                    if (statement != null) {
-                        try {
-                            statement.close();
-                        } catch (SQLException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                    if (connection != null) {
-                        try {
-                            connection.close();
-                        } catch (SQLException e) {
-                            e.printStackTrace();
-                        }
-                    }
-
-
-                    ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, spinnerClassItems);
-                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                    spinnerClass.setAdapter(adapter);
-                }
-            }
-        }
-
-        private void setTxtTitle (Connection connection, Statement statement){
-            ResultSet result = null;
-            result = stmts.performDatabaseOperation("SELECT description FROM leihobjekt WHERE scancode =" + code, 0, connection, statement);
-
-            try {
-                if(result != null) {
-                    try {
-                        if(result.next()){
-                            desc = result.getString("description");
-                            tvAusgabe.setText(desc);
-                        }
-
-                    }catch (Exception e){
-                        Log.e("Error: ", e.getMessage());
-                    }
-                }
-            } catch (Exception e) {
-                Log.e("Error: ", e.getMessage());
-            }finally {
-                // ResultSet schließen
                 if (result != null) {
                     try {
                         result.close();
+                        resultRows.close();
                     } catch (SQLException e) {
                         e.printStackTrace();
                     }
@@ -316,36 +268,42 @@ try {
                         e.printStackTrace();
                     }
                 }
+
+
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, spinnerClassItems);
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                spinnerClass.setAdapter(adapter);
             }
         }
+    }
 
-        private void setDBAccess () {
-            try {
-                connection = MySQLConnection.getConnection();
-                statement = connection.createStatement();
-
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-        }
-
-    @Override
-    public void onClick(View v) {
-        setDBAccess();
-        String student = (String) spinnerStudent.getSelectedItem();
-        String[] students = student.split(" ");
-        String tid = getIntent().getStringExtra("teacherid");
-        String stundentselect = ", (SELECT idstudent FROM student WHERE lastname='" + students[0] +"'" + " AND firstname='" + students[1] + "')";
-        String leihselect =  ", (SELECT idleihobjekt FROM leihobjekt WHERE description ='" + desc + "')";
-        String currentTimeStamp =  new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new java.util.Date()).toString();
-
+    private void setTxtTitle(Connection connection, Statement statement) {
+        ResultSet result = null;
+        result = stmts.performDatabaseOperation("SELECT description FROM leihobjekt WHERE scancode =" + code, 0, connection, statement);
 
         try {
-            stmts.performDatabaseOperation("INSERT INTO borrowed VALUES("+ "null"+ ", " + tid + stundentselect + leihselect + ", 0, " + "'" + currentTimeStamp + "')" , 1, connection, statement);
-            Toast.makeText(this, "Ausleihe wurde in der Datenbank hinzugefügt", Toast.LENGTH_SHORT).show();
+            if (result != null) {
+                try {
+                    if (result.next()) {
+                        desc = result.getString("description");
+                        tvAusgabe.setText(desc);
+                    }
+
+                } catch (Exception e) {
+                    Log.e("Error: ", e.getMessage());
+                }
+            }
         } catch (Exception e) {
             Log.e("Error: ", e.getMessage());
-        }finally {
+        } finally {
+            // ResultSet schließen
+            if (result != null) {
+                try {
+                    result.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
 
             if (statement != null) {
                 try {
@@ -359,6 +317,142 @@ try {
                     connection.close();
                 } catch (SQLException e) {
                     e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    private void setDBAccess() {
+        try {
+            connection = MySQLConnection.getConnection();
+            statement = connection.createStatement();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        setDBAccess();
+        String student = (String) spinnerStudent.getSelectedItem();
+        String[] students = student.split(" ");
+        String tid = getIntent().getStringExtra("teacherid");
+        String stundentselect = ", (SELECT idstudent FROM student WHERE lastname='" + students[0] + "'" + " AND firstname='" + students[1] + "')";
+        String leihselect = ", (SELECT idleihobjekt FROM leihobjekt WHERE description ='" + desc + "')";
+        String currentTimeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new java.util.Date()).toString();
+
+        if (isAll = false) {
+
+            try {
+                stmts.performDatabaseOperation("INSERT INTO borrowed VALUES(" + "null" + ", " + tid + stundentselect + leihselect + ", 0, " + "'" + currentTimeStamp + "')", 1, connection, statement);
+                Toast.makeText(this, "Ausleihe wurde in der Datenbank hinzugefügt", Toast.LENGTH_SHORT).show();
+            } catch (Exception e) {
+                Log.e("Error: ", e.getMessage());
+            } finally {
+
+                if (statement != null) {
+                    try {
+                        statement.close();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if (connection != null) {
+                    try {
+                        connection.close();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        } else {
+            ResultSet result = null;
+            ResultSet resultRows = null;
+            klasse = (String) spinnerClass.getSelectedItem();
+            String[] klasseid = klasse.split(" ");
+            resultRows = stmts.performDatabaseOperation("SELECT COUNT('idstudent') anz FROM student WHERE idclass ='" + klasseid[0] + "'", 0, connection, statement);
+
+            String[] studentLength = null;
+
+            try {
+                if (resultRows != null) {
+
+                    try {
+
+                        while (resultRows.next()) {
+                            studentLength = new String[resultRows.getInt("anz")];
+
+                        }
+                    } catch (Exception exception) {
+                        Log.e("Error: ", exception.getMessage());
+                    }
+                }
+            } catch (Exception e) {
+                Log.e("Error", e.getMessage());
+            } finally {
+                // ResultSet schließen
+                if (resultRows != null) {
+                    try {
+                        resultRows.close();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                result = stmts.performDatabaseOperation("SELECT idstudent FROM student WHERE idclass='" + klasseid[0] + "'", 0, connection, statement);
+                try {
+                    if (result != null) {
+
+                        try {
+                            int i = 0;
+                            while (result.next()) {
+                                studentLength[i] = result.getString("idstudent");
+                                i++;
+                            }
+                        } catch (Exception exception) {
+                            Log.e("Error: ", exception.getMessage());
+                        }
+                    }
+                } catch (Exception e) {
+                    Log.e("Error", e.getMessage());
+                } finally {
+                    try {
+                        try {
+                            for(int i = 0; i < studentLength.length; i++){
+                                stmts.performDatabaseOperation("INSERT INTO borrowed VALUES(" + "null" + ", " + tid + studentLength[i] + leihselect + ", 0, " + "'" + currentTimeStamp + "')", 1, connection, statement);
+                            }
+                        } catch (Exception exception) {
+                            Log.e("Error: ", exception.getMessage());
+                        }
+                    } catch (Exception e) {
+                        Log.e("Error", e.getMessage());
+                    } finally {
+                        // ResultSet schließen
+                        if (result != null) {
+                            try {
+                                result.close();
+                                resultRows.close();
+                            } catch (SQLException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        if (statement != null) {
+                            try {
+                                statement.close();
+                            } catch (SQLException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        if (connection != null) {
+                            try {
+                                connection.close();
+                            } catch (SQLException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
                 }
             }
         }
