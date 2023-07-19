@@ -130,7 +130,6 @@ public class LeherView extends AppCompatActivity {
 
         Intent intent = new Intent(this, NewObjectView.class);
         intent.putExtra("code", code);
-        intent.putExtra("teacherid", getIntent().getStringExtra("teacherid"));
         startActivity(intent);
     }
 }

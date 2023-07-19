@@ -32,7 +32,7 @@ public class NewObjectView extends AppCompatActivity implements View.OnClickList
         Connection connection = null;
         Statement statement = null;
         Button btnSubmit;
-        String desc = "";
+        String category = "";
 
         @Override
         protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +50,7 @@ public class NewObjectView extends AppCompatActivity implements View.OnClickList
             quantity.setMaxValue(100);
 
 
+
             btnSubmit.setOnClickListener(this);
 
 
@@ -65,6 +66,7 @@ public class NewObjectView extends AppCompatActivity implements View.OnClickList
                 spinnerCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                        category = (String) parent.getSelectedItem();
 
                     }
 
@@ -179,15 +181,14 @@ public class NewObjectView extends AppCompatActivity implements View.OnClickList
         @Override
         public void onClick(View v) {
             setDBAccess();
-            String category = (String) spinnerCategory.getSelectedItem();
             String[] categorys = category.split(" ");
-            String stundentselect = ", (SELECT idstudent FROM student WHERE lastname='" + categorys[0] +"'" + " AND firstname='" + categorys[1] + "')";
-            String leihselect =  ", (SELECT idleihobjekt FROM leihobjekt WHERE description ='" + desc + "')";
-            String currentTimeStamp =  new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new java.util.Date()).toString();
+
+            String code = getIntent().getStringExtra("code");
+            int qnty = quantity.getValue();
 
 
             try {
-                //stmts.performDatabaseOperation("INSERT INTO borrowed VALUES("+ "null"+ ", " + tid + stundentselect + leihselect + ", 0, " + "'" + currentTimeStamp + "')" , 1, connection, statement);
+                stmts.performDatabaseOperation("INSERT INTO leihobjekt VALUES("+ "null"+ ", " + code + ", " + "'"  + etDescription.getText().toString() + "'" + ", " + qnty + ", " + categorys[0] + ")" , 1, connection, statement);
                 Toast.makeText(this, "Ausleihe wurde in der Datenbank hinzugefügt", Toast.LENGTH_SHORT).show();
             } catch (Exception e) {
                 Log.e("Error: ", e.getMessage());
