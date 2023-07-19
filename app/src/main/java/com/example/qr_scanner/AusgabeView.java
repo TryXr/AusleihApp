@@ -36,6 +36,7 @@ public class AusgabeView extends AppCompatActivity implements View.OnClickListen
     String desc = "";
     Boolean isAll = false;
     String klasse = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,7 +84,7 @@ public class AusgabeView extends AppCompatActivity implements View.OnClickListen
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     setDBAccess();
                     try {
-                         klasse = (String) parent.getSelectedItem();
+                        klasse = (String) parent.getSelectedItem();
                         setSpinnerStudent(connection, statement, klasse);
                     } catch (Exception e) {
                         Log.e("Error: ", e.getMessage());
@@ -417,40 +418,40 @@ public class AusgabeView extends AppCompatActivity implements View.OnClickListen
                 } catch (Exception e) {
                     Log.e("Error", e.getMessage());
                 } finally {
-                    try {
+                    // ResultSet schließen
+                    if (result != null) {
                         try {
-                            for(int i = 0; i < studentLength.length; i++){
-                                stmts.performDatabaseOperation("INSERT INTO borrowed VALUES(" + "null" + ", " + tid + studentLength[i] + leihselect + ", 0, " + "'" + currentTimeStamp + "')", 1, connection, statement);
-                            }
-                        } catch (Exception exception) {
-                            Log.e("Error: ", exception.getMessage());
+                            result.close();
+                            resultRows.close();
+                        } catch (SQLException e) {
+                            e.printStackTrace();
                         }
-                    } catch (Exception e) {
-                        Log.e("Error", e.getMessage());
-                    } finally {
-                        // ResultSet schließen
-                        if (result != null) {
-                            try {
-                                result.close();
-                                resultRows.close();
-                            } catch (SQLException e) {
-                                e.printStackTrace();
-                            }
+                    }
+                }
+                try {
+                    try {
+                        for (int i = 0; i < studentLength.length; i++) {
+                            stmts.performDatabaseOperation("INSERT INTO borrowed VALUES(" + "null" + ", " + tid + studentLength[i] + leihselect + ", 0, " + "'" + currentTimeStamp + "')", 1, connection, statement);
                         }
+                    } catch (Exception exception) {
+                        Log.e("Error: ", exception.getMessage());
+                    }
+                } catch (Exception e) {
+                    Log.e("Error", e.getMessage());
+                } finally {
 
-                        if (statement != null) {
-                            try {
-                                statement.close();
-                            } catch (SQLException e) {
-                                e.printStackTrace();
-                            }
+                    if (statement != null) {
+                        try {
+                            statement.close();
+                        } catch (SQLException e) {
+                            e.printStackTrace();
                         }
-                        if (connection != null) {
-                            try {
-                                connection.close();
-                            } catch (SQLException e) {
-                                e.printStackTrace();
-                            }
+                    }
+                    if (connection != null) {
+                        try {
+                            connection.close();
+                        } catch (SQLException e) {
+                            e.printStackTrace();
                         }
                     }
                 }
@@ -458,3 +459,4 @@ public class AusgabeView extends AppCompatActivity implements View.OnClickListen
         }
     }
 }
+
