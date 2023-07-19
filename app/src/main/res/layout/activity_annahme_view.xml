@@ -88,7 +88,7 @@
 
             <TableRow>
                 <TextView
-                    android:id="@+id/tvAll"
+                    android:id="@+id/tvDamaged"
                     android:layout_width="0dp"
                     android:layout_height="20dp"
                     android:text="Beschädigt:"
@@ -100,7 +100,7 @@
                     />
 
                 <CheckBox
-                    android:id="@+id/cbAll"
+                    android:id="@+id/cbDamaged"
                     android:layout_width="0dp"
                     android:layout_marginVertical="20dp"
                     android:layout_height="20dp"
@@ -111,7 +111,7 @@
         </TableLayout>
 
         <Button
-            android:id="@+id/buttonAusgabe"
+            android:id="@+id/btnAnnahme"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="30dp"
