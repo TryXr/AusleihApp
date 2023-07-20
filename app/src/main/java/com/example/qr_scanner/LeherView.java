@@ -50,7 +50,7 @@ public class LeherView extends AppCompatActivity {
         try {
             if (result != null && result.next()) {
                 String description = result.getString("description");
-            tvProdukt.setText(description);
+                tvProdukt.setText(description);
             }else{
                 startNewObject();
             }

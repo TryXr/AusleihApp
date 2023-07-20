@@ -2,6 +2,7 @@ package com.example.qr_scanner;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -210,5 +211,12 @@ public class NewObjectView extends AppCompatActivity implements View.OnClickList
                 }
             }
         }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent(this, ScannerKlasse.class);
+        startActivity(intent);
     }
+}
 

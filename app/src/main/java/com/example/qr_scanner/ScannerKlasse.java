@@ -73,19 +73,12 @@ public class ScannerKlasse extends AppCompatActivity {
     }
 
     private void makeNew(String result) {
-        Intent intent = getIntent();
-        zugriff = intent.getIntExtra("zugriff", 0);
 
-        if(zugriff == 0){
-
-            Intent newIntent = new Intent(this, StudentView.class);
-            startActivity(newIntent);
-        }else{
             Intent newIntent = new Intent(this, LeherView.class);
             newIntent.putExtra("code", result);
             newIntent.putExtra("teacherid", getIntent().getStringExtra("teacherid"));
             startActivity(newIntent);
-        }
+
     }
 
     @Override
