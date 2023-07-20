@@ -327,6 +327,7 @@ public class AnnahmeView extends AppCompatActivity implements View.OnClickListen
     @Override
     public void onClick(View v) {
 
-        //String update = "UPDATE borrowed SET isback = 1 WHERE scancode";
+        String update = "UPDATE borrowed b INNER JOIN leihobjekt c ON b.idlendingobject = c.idleihobjekt SET b.isback = 1 WHERE c.scancode = '"+ code +"'";
+
     }
 }

@@ -37,6 +37,8 @@ public class AusgabeView extends AppCompatActivity implements View.OnClickListen
     Boolean isAll = false;
     String klasse = "";
 
+    int menge=0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -280,7 +282,7 @@ public class AusgabeView extends AppCompatActivity implements View.OnClickListen
 
     private void setTxtTitle(Connection connection, Statement statement) {
         ResultSet result = null;
-        result = stmts.performDatabaseOperation("SELECT description FROM leihobjekt WHERE scancode =" + code, 0, connection, statement);
+        result = stmts.performDatabaseOperation("SELECT description, quantity FROM leihobjekt WHERE scancode =" + code, 0, connection, statement);
 
         try {
             if (result != null) {
@@ -288,6 +290,7 @@ public class AusgabeView extends AppCompatActivity implements View.OnClickListen
                     if (result.next()) {
                         desc = result.getString("description");
                         tvAusgabe.setText(desc);
+                        menge=result.getInt("quantity");
                     }
 
                 } catch (Exception e) {
@@ -343,11 +346,17 @@ public class AusgabeView extends AppCompatActivity implements View.OnClickListen
         String leihselect = ", (SELECT idleihobjekt FROM leihobjekt WHERE description ='" + desc + "')";
         String currentTimeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new java.util.Date()).toString();
 
-        if (isAll = false) {
+        if (isAll == false) {
 
             try {
+                if (menge>=1) {
                 stmts.performDatabaseOperation("INSERT INTO borrowed VALUES(" + "null" + ", " + tid + stundentselect + leihselect + ", 0, " + "'" + currentTimeStamp + "')", 1, connection, statement);
                 Toast.makeText(this, "Ausleihe wurde in der Datenbank hinzugefügt", Toast.LENGTH_SHORT).show();
+                }
+                else
+                {
+                    Toast.makeText(this, "Ausleihe ist nicht möglich", Toast.LENGTH_SHORT).show();
+                }
             } catch (Exception e) {
                 Log.e("Error: ", e.getMessage());
             } finally {
@@ -402,6 +411,7 @@ public class AusgabeView extends AppCompatActivity implements View.OnClickListen
                 }
 
                 result = stmts.performDatabaseOperation("SELECT idstudent FROM student WHERE idclass='" + klasseid[0] + "'", 0, connection, statement);
+
                 try {
                     if (result != null) {
 
@@ -430,11 +440,17 @@ public class AusgabeView extends AppCompatActivity implements View.OnClickListen
                 }
                 try {
                     try {
-                        for (int i = 0; i < studentLength.length; i++) {
-                            String sid = studentLength[i];
-                            stmts.performDatabaseOperation("INSERT INTO borrowed VALUES(" + "null" + ", " + tid + ", " + sid + leihselect + ", 0, " + "'" + currentTimeStamp + "')", 1, connection, statement);
+                        if (menge>=studentLength.length) {
+                            for (int i = 0; i < studentLength.length; i++) {
+                                String sid = studentLength[i];
+                                stmts.performDatabaseOperation("INSERT INTO borrowed VALUES(" + "null" + ", " + tid + ", " + sid + leihselect + ", 0, " + "'" + currentTimeStamp + "')", 1, connection, statement);
+                            }
+                            Toast.makeText(this, "Ausleihe wurde für die Klasse hinzugefügt", Toast.LENGTH_SHORT).show();
                         }
-                        Toast.makeText(this, "Ausleihe wurde für die Klasse hinzugefügt", Toast.LENGTH_SHORT).show();
+                        else
+                        {
+                            Toast.makeText(this, "Ausleihe ist nicht möglich", Toast.LENGTH_SHORT).show();
+                        }
                     } catch (Exception exception) {
                         Log.e("Error: ", exception.getMessage());
                     }
