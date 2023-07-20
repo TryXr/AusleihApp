@@ -350,7 +350,7 @@ public class AusgabeView extends AppCompatActivity implements View.OnClickListen
             setDBAccess();
             try {
                 if (menge>=1) {
-                stmts.performDatabaseOperation("INSERT INTO borrowed VALUES(" + "null" + ", " + tid + stundentselect + leihselect + ", 0, " + "'" + currentTimeStamp + "')", 3, connection, statement);
+                stmts.performDatabaseOperation("INSERT INTO borrowed VALUES(" + "null" + ", " + tid + stundentselect + leihselect + ", 0, " + "'" + currentTimeStamp + "')", 1, connection, statement);
                 Toast.makeText(this, "Ausleihe wurde in der Datenbank hinzugefügt", Toast.LENGTH_SHORT).show();
                 }
                 else
@@ -480,7 +480,7 @@ public class AusgabeView extends AppCompatActivity implements View.OnClickListen
     }
 
     private int getMenge() {
-
+        setDBAccess();
         ResultSet result = null;
         result = stmts.performDatabaseOperation("SELECT l.idleihobjekt,description, scancode, quantity - (SELECT count(idlendingobject) FROM borrowed b WHERE b.idlendingobject = l.idleihobjekt AND isback = 0) as quantity, title FROM leihobjekt l JOIN category ON category.idcategory = l.idcategory WHERE idleihobjekt=" + id, 3, connection, statement);
         int ret = 0;
