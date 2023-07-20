@@ -36,7 +36,7 @@ public class AusgabeView extends AppCompatActivity implements View.OnClickListen
     String desc = "";
     Boolean isAll = false;
     String klasse = "";
-
+    int id = 0;
     int menge=0;
 
     @Override
@@ -282,7 +282,7 @@ public class AusgabeView extends AppCompatActivity implements View.OnClickListen
 
     private void setTxtTitle(Connection connection, Statement statement) {
         ResultSet result = null;
-        result = stmts.performDatabaseOperation("SELECT description, quantity FROM leihobjekt WHERE scancode =" + code, 0, connection, statement);
+        result = stmts.performDatabaseOperation("SELECT description, idleihobjekt FROM leihobjekt WHERE scancode =" + code, 0, connection, statement);
 
         try {
             if (result != null) {
@@ -290,7 +290,7 @@ public class AusgabeView extends AppCompatActivity implements View.OnClickListen
                     if (result.next()) {
                         desc = result.getString("description");
                         tvAusgabe.setText(desc);
-                        menge=result.getInt("quantity");
+                        id = result.getInt("idleihobjekt");
                     }
 
                 } catch (Exception e) {
@@ -338,19 +338,19 @@ public class AusgabeView extends AppCompatActivity implements View.OnClickListen
 
     @Override
     public void onClick(View v) {
-        setDBAccess();
+
         String student = (String) spinnerStudent.getSelectedItem();
         String[] students = student.split(" ");
         String tid = getIntent().getStringExtra("teacherid");
         String stundentselect = ", (SELECT idstudent FROM student WHERE lastname='" + students[0] + "'" + " AND firstname='" + students[1] + "')";
         String leihselect = ", (SELECT idleihobjekt FROM leihobjekt WHERE description ='" + desc + "')";
         String currentTimeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new java.util.Date()).toString();
-
+        menge = getMenge();
         if (isAll == false) {
-
+            setDBAccess();
             try {
                 if (menge>=1) {
-                stmts.performDatabaseOperation("INSERT INTO borrowed VALUES(" + "null" + ", " + tid + stundentselect + leihselect + ", 0, " + "'" + currentTimeStamp + "')", 1, connection, statement);
+                stmts.performDatabaseOperation("INSERT INTO borrowed VALUES(" + "null" + ", " + tid + stundentselect + leihselect + ", 0, " + "'" + currentTimeStamp + "')", 3, connection, statement);
                 Toast.makeText(this, "Ausleihe wurde in der Datenbank hinzugefügt", Toast.LENGTH_SHORT).show();
                 }
                 else
@@ -377,6 +377,7 @@ public class AusgabeView extends AppCompatActivity implements View.OnClickListen
                 }
             }
         } else {
+            setDBAccess();
             ResultSet result = null;
             ResultSet resultRows = null;
             klasse = (String) spinnerClass.getSelectedItem();
@@ -445,6 +446,7 @@ public class AusgabeView extends AppCompatActivity implements View.OnClickListen
                                 String sid = studentLength[i];
                                 stmts.performDatabaseOperation("INSERT INTO borrowed VALUES(" + "null" + ", " + tid + ", " + sid + leihselect + ", 0, " + "'" + currentTimeStamp + "')", 1, connection, statement);
                             }
+                            //stmts.performDatabaseOperation("UPDATE leihobjekt SET quantity = quantity -" + menge, 1, connection, statement);
                             Toast.makeText(this, "Ausleihe wurde für die Klasse hinzugefügt", Toast.LENGTH_SHORT).show();
                         }
                         else
@@ -475,6 +477,54 @@ public class AusgabeView extends AppCompatActivity implements View.OnClickListen
                 }
             }
         }
+    }
+
+    private int getMenge() {
+
+        ResultSet result = null;
+        result = stmts.performDatabaseOperation("SELECT l.idleihobjekt,description, scancode, quantity - (SELECT count(idlendingobject) FROM borrowed b WHERE b.idlendingobject = l.idleihobjekt AND isback = 0) as quantity, title FROM leihobjekt l JOIN category ON category.idcategory = l.idcategory WHERE idleihobjekt=" + id, 3, connection, statement);
+        int ret = 0;
+        try {
+            if (result != null) {
+                try {
+                    if (result.next()) {
+                        ret = result.getInt("quantity");
+                    }
+
+                } catch (Exception e) {
+                    Log.e("Error: ", e.getMessage());
+                }
+            }
+        } catch (Exception e) {
+            Log.e("Error: ", e.getMessage());
+        } finally {
+            // ResultSet schließen
+            if (result != null) {
+                try {
+                    result.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+
+        return ret;
     }
 }
 

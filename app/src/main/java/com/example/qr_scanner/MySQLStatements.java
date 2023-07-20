@@ -24,6 +24,10 @@ public class MySQLStatements {
                 resultSet = statement.executeQuery(sql);
 
             }
+            if(zgr == 3){
+                resultSet = statement.executeQuery(sql);
+
+            }
 
             // Insert
             if(zgr == 1){
