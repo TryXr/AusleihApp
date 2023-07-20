@@ -30,7 +30,7 @@ public class LeherView extends AppCompatActivity {
         code = getIntent().getStringExtra("code");
         Button buttonAusgabe = findViewById(R.id.buttonAusgabe);
         Button buttonAnnahme = findViewById(R.id.buttonAnnahme);
-        Button buttonNeu = findViewById(R.id.buttonNeuesGeraetBuch);
+
         Button buttonLoeschen = findViewById(R.id.buttonGeraetBuchLoeschen);
         MySQLStatements stmts = new MySQLStatements();
         TextView tvProdukt = findViewById(R.id.tvProdukt);
@@ -96,15 +96,6 @@ public class LeherView extends AppCompatActivity {
             public void onClick(View v) {
                 //Hier folgt die Annahme (Datenbank usw.)
                 startAnnahme();
-            }
-        });
-
-        buttonNeu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Hier folgt die Eintragung von etwas neuem (Datenbank usw.)
-                startNewObject();
-                //stmts.performDatabaseOperation("INSERT INTO artikel", 2);
             }
         });
 
