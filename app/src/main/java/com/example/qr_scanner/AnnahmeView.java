@@ -2,6 +2,7 @@ package com.example.qr_scanner;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -326,8 +327,16 @@ public class AnnahmeView extends AppCompatActivity implements View.OnClickListen
 
     @Override
     public void onClick(View v) {
+        setDBAccess();
+        String name = (String)spinnerStudent.getSelectedItem();
+        String[] names = name.split(" ");
+        String klasse = (String)spinnerClass.getSelectedItem();
+        String[] klassen=klasse.split(" ");
+        String update = "UPDATE borrowed SET isback = 1 WHERE idlendingobject = (SELECT idleihobjekt FROM leihobjekt WHERE scancode =" + code +") AND idstudent = (SELECT idstudent FROM student WHERE lastname ="+"'"+names[0]+"'"+" AND firstname ="+"'"+names[1]+"'"+" AND idclass = "+klassen[0]+") AND idteacher =" + teacherid;
+        ResultSet set = stmts.performDatabaseOperation(update,1, connection, statement);
 
-        String update = "UPDATE borrowed b INNER JOIN leihobjekt c ON b.idlendingobject = c.idleihobjekt SET b.isback = 1 WHERE c.scancode = '"+ code +"'";
+        //startActivity(intent);
+
 
     }
 }
