@@ -13,6 +13,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -332,9 +333,14 @@ public class AnnahmeView extends AppCompatActivity implements View.OnClickListen
         String[] names = name.split(" ");
         String klasse = (String)spinnerClass.getSelectedItem();
         String[] klassen=klasse.split(" ");
-        String update = "UPDATE borrowed SET isback = 1 WHERE idlendingobject = (SELECT idleihobjekt FROM leihobjekt WHERE scancode =" + code +") AND idstudent = (SELECT idstudent FROM student WHERE lastname ="+"'"+names[0]+"'"+" AND firstname ="+"'"+names[1]+"'"+" AND idclass = "+klassen[0]+") AND idteacher =" + teacherid;
-        ResultSet set = stmts.performDatabaseOperation(update,1, connection, statement);
-
+        String update = "UPDATE borrowed SET isback = 1 WHERE isback = 0 AND idlendingobject = (SELECT idleihobjekt FROM leihobjekt WHERE scancode =" + code +") AND idstudent = (SELECT idstudent FROM student WHERE lastname ="+"'"+names[0]+"'"+" AND firstname ="+"'"+names[1]+"'"+" AND idclass = "+klassen[0]+") AND idteacher =" + teacherid;
+        stmts.performDatabaseOperation(update,1, connection, statement);
+        if(stmts.rows == 1){
+            Toast.makeText(this,"Ausleihe wurde zurückgegeben",Toast.LENGTH_LONG).show();
+            stmts.rows=0;
+        }else{
+            Toast.makeText(this,"Keine Ausleihe wurde zu dieser Person gefunden",Toast.LENGTH_LONG).show();
+        }
         //startActivity(intent);
 
 

@@ -9,6 +9,7 @@ import java.util.List;
 
 public class MySQLStatements {
 
+    int rows = 0;
     public MySQLStatements(){
 
     }
@@ -30,9 +31,9 @@ public class MySQLStatements {
             }
 
             // Insert
-            if(zgr == 1){
-              int rows = statement.executeUpdate(sql);
-
+            if(zgr == 1)
+            {
+                rows = statement.executeUpdate(sql);
             }
             //statement.close();
             //connection.close();
@@ -42,6 +43,11 @@ public class MySQLStatements {
         }
 
         return  resultSet;
+    }
+
+    public int getRows()
+    {
+        return rows;
     }
 
 
