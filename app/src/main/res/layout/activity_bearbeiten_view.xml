@@ -38,7 +38,7 @@
             android:layout_height="0sp"
 
             app:layout_constraintTop_toBottomOf="@id/tvAusgabe"
-            app:layout_constraintBottom_toTopOf="@id/buttonAusgabe"
+            app:layout_constraintBottom_toTopOf="@id/buttonEdit"
             android:layout_marginHorizontal="30dp"
             app:layout_constraintVertical_chainStyle="spread_inside"
             app:layout_constraintVertical_weight="2">
@@ -107,11 +107,11 @@
         </TableLayout>
 
         <Button
-            android:id="@+id/buttonAusgabe"
+            android:id="@+id/buttonEdit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="30dp"
-            android:text="Ausgabe"
+            android:text="Änderungen Speichern"
             android:layout_marginVertical="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tabelle"
