@@ -141,7 +141,7 @@ public class LeherView extends AppCompatActivity {
         builder.setPositiveButton("Ja", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 setDBAccess();
-                stmts.performDatabaseOperation("DELETE FROM leihobjekt WHERE scancode=" + code, 1, connection, statement);
+                stmts.performDatabaseOperation("UPDATE leihobjekt SET quantity = quantity -1 WHERE scancode=" + code, 1, connection, statement);
                 dialog.dismiss(); // Close the dialog
             }
         });
