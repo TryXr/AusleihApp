@@ -20,7 +20,7 @@ public class LeherView extends AppCompatActivity {
 
     MySQLStatements stmts = new MySQLStatements();
     private String code;
-
+    String description;
     Statement statement;
     Connection connection;
     @Override
@@ -30,7 +30,7 @@ public class LeherView extends AppCompatActivity {
         code = getIntent().getStringExtra("code");
         Button buttonAusgabe = findViewById(R.id.buttonAusgabe);
         Button buttonAnnahme = findViewById(R.id.buttonAnnahme);
-
+        Button buttonEdit = findViewById(R.id.buttonGeraetBuchBearbeiten);
         Button buttonLoeschen = findViewById(R.id.buttonGeraetBuchLoeschen);
         MySQLStatements stmts = new MySQLStatements();
         TextView tvProdukt = findViewById(R.id.tvProdukt);
@@ -49,7 +49,7 @@ public class LeherView extends AppCompatActivity {
 
         try {
             if (result != null && result.next()) {
-                String description = result.getString("description");
+                 description = result.getString("description");
                 tvProdukt.setText(description);
             }else{
                 startNewObject();
@@ -105,6 +105,13 @@ public class LeherView extends AppCompatActivity {
                 showMessageDialog();
             }
         });
+
+        buttonEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startEdit();
+            }
+        });
     }
 
     private void startAusgabe() {
@@ -127,6 +134,15 @@ public class LeherView extends AppCompatActivity {
 
         Intent intent = new Intent(this, NewObjectView.class);
         intent.putExtra("code", code);
+        startActivity(intent);
+    }
+
+    private void startEdit(){
+
+        Intent intent = new Intent(this, BearbeitenView.class);
+        intent.putExtra("code", code);
+        intent.putExtra("description", description);
+        intent.putExtra("teacherid", getIntent().getStringExtra("teacherid"));
         startActivity(intent);
     }
 
