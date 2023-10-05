@@ -3,6 +3,7 @@ package com.example.qr_scanner;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.opengl.Visibility;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -11,6 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,6 +34,7 @@ public class AnnahmeView extends AppCompatActivity implements View.OnClickListen
     String desc = "";
     Button btnSubmit;
     Boolean isDamaged = false;
+    EditText etDamaged;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,21 +42,24 @@ public class AnnahmeView extends AppCompatActivity implements View.OnClickListen
         setContentView(R.layout.activity_annahme_view);
         code = getIntent().getStringExtra("code");
         teacherid = getIntent().getStringExtra("teacherid");
-
+        etDamaged = findViewById(R.id.etDamaged);
         spinnerClass = findViewById(R.id.spinnerClass);
         spinnerStudent = findViewById(R.id.spinnerStudent);
         cbDamaged = findViewById(R.id.cbDamaged);
         tvAusgabe = findViewById(R.id.tvAusgabe);
         tvDamaged = findViewById(R.id.tvDamaged);
         btnSubmit = findViewById(R.id.btnAnnahme);
+        etDamaged.setVisibility(View.INVISIBLE);
         cbDamaged.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (cbDamaged.isChecked()) {
                     isDamaged = true;
+                    etDamaged.setVisibility(View.VISIBLE);
 
                 } else {
                     isDamaged = false;
+                    etDamaged.setVisibility(View.INVISIBLE);
                 }
             }
         });
@@ -340,6 +346,10 @@ public class AnnahmeView extends AppCompatActivity implements View.OnClickListen
             stmts.rows=0;
         }else{
             Toast.makeText(this,"Keine Ausleihe wurde zu dieser Person gefunden",Toast.LENGTH_LONG).show();
+        }
+        if(isDamaged && stmts.rows == 1){
+            String sql = "INSERT INTO error VALUES(null, (SELECT idborrowed FROM borrowed WHERE idlendingobject = (SELECT idleihobjekt FROM leihobjekt WHERE scancode =" + code +") AND idstudent = (SELECT idstudent FROM student WHERE lastname =" + "'" +names[0]+ "'" + " AND firstname ="+ "'" +names[1]+ "'"+ " AND idclass = "+klassen[0]+ ") AND idteacher = " + teacherid + "), "+ "'" + etDamaged.getText() + "')";
+            stmts.performDatabaseOperation("INSERT INTO error VALUES(null, (SELECT idborrowed FROM borrowed WHERE idlendingobject = (SELECT idleihobjekt FROM leihobjekt WHERE scancode =" + code +") AND idstudent = (SELECT idstudent FROM student WHERE lastname =" + "'" +names[0]+ "'" + " AND firstname ="+ "'" +names[1]+ "'"+ " AND idclass = "+klassen[0]+ ") AND idteacher = " + teacherid + "), "+ "'" + etDamaged.getText() + "')", 1, connection, statement);
         }
         //startActivity(intent);
 
