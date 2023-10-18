@@ -350,6 +350,7 @@ public class AnnahmeView extends AppCompatActivity implements View.OnClickListen
         if(isDamaged && stmts.rows == 1){
             String sql = "INSERT INTO error VALUES(null, (SELECT idborrowed FROM borrowed WHERE idlendingobject = (SELECT idleihobjekt FROM leihobjekt WHERE scancode =" + code +") AND idstudent = (SELECT idstudent FROM student WHERE lastname =" + "'" +names[0]+ "'" + " AND firstname ="+ "'" +names[1]+ "'"+ " AND idclass = "+klassen[0]+ ") AND idteacher = " + teacherid + "), "+ "'" + etDamaged.getText() + "')";
             stmts.performDatabaseOperation("INSERT INTO error VALUES(null, (SELECT idborrowed FROM borrowed WHERE idlendingobject = (SELECT idleihobjekt FROM leihobjekt WHERE scancode =" + code +") AND idstudent = (SELECT idstudent FROM student WHERE lastname =" + "'" +names[0]+ "'" + " AND firstname ="+ "'" +names[1]+ "'"+ " AND idclass = "+klassen[0]+ ") AND idteacher = " + teacherid + "), "+ "'" + etDamaged.getText() + "')", 1, connection, statement);
+            ;
         }
         //startActivity(intent);
 
