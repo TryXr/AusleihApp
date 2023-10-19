@@ -21,6 +21,8 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class AnnahmeView extends AppCompatActivity implements View.OnClickListener {
 
@@ -343,15 +345,16 @@ public class AnnahmeView extends AppCompatActivity implements View.OnClickListen
         stmts.performDatabaseOperation(update,1, connection, statement);
         if(stmts.rows == 1){
             Toast.makeText(this,"Ausleihe wurde zurückgegeben",Toast.LENGTH_LONG).show();
-            stmts.rows=0;
+
         }else{
             Toast.makeText(this,"Keine Ausleihe wurde zu dieser Person gefunden",Toast.LENGTH_LONG).show();
         }
         if(isDamaged && stmts.rows == 1){
             String sql = "INSERT INTO error VALUES(null, (SELECT idborrowed FROM borrowed WHERE idlendingobject = (SELECT idleihobjekt FROM leihobjekt WHERE scancode =" + code +") AND idstudent = (SELECT idstudent FROM student WHERE lastname =" + "'" +names[0]+ "'" + " AND firstname ="+ "'" +names[1]+ "'"+ " AND idclass = "+klassen[0]+ ") AND idteacher = " + teacherid + "), "+ "'" + etDamaged.getText() + "')";
-            stmts.performDatabaseOperation("INSERT INTO error VALUES(null, (SELECT idborrowed FROM borrowed WHERE idlendingobject = (SELECT idleihobjekt FROM leihobjekt WHERE scancode =" + code +") AND idstudent = (SELECT idstudent FROM student WHERE lastname =" + "'" +names[0]+ "'" + " AND firstname ="+ "'" +names[1]+ "'"+ " AND idclass = "+klassen[0]+ ") AND idteacher = " + teacherid + "), "+ "'" + etDamaged.getText() + "')", 1, connection, statement);
-            ;
+            stmts.performDatabaseOperation("INSERT INTO error VALUES(null, (SELECT idborrowed FROM borrowed WHERE idlendingobject = (SELECT idleihobjekt FROM leihobjekt WHERE scancode =" + code +") AND idstudent = (SELECT idstudent FROM student WHERE lastname =" + "'" +names[0]+ "'" + " AND firstname ="+ "'" +names[1]+ "'"+ " AND idclass = "+klassen[0]+ ") AND idteacher = " + teacherid + " Limit 1), "+ "'" + etDamaged.getText() + "')", 1, connection, statement);
+
         }
+        stmts.rows = 0;
         //startActivity(intent);
 
 
