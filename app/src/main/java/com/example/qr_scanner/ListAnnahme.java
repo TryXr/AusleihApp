@@ -2,21 +2,26 @@ package com.example.qr_scanner;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class ListAnnahme extends AppCompatActivity {
+public class ListAnnahme extends AppCompatActivity implements View.OnClickListener {
 
     MySQLStatements stmts = new MySQLStatements();
     Connection connection = null;
@@ -24,13 +29,16 @@ public class ListAnnahme extends AppCompatActivity {
     Button btnAuswählen;
     ListView lvBorrowed;
 
+    String scancode;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_annahme);
         setDBAccess();
         btnAuswählen = findViewById(R.id.btnAuswählen);
+        btnAuswählen.setOnClickListener(this);
         lvBorrowed = findViewById(R.id.lvBorrowed);
+        scancode = getIntent().getStringExtra("code");
         setItemSource();
 
     }
@@ -38,9 +46,9 @@ public class ListAnnahme extends AppCompatActivity {
     private void setItemSource() {
         ResultSet result = null;
         ResultSet resultRows = null;
-        resultRows = stmts.performDatabaseOperation("SELECT COUNT('idcategory') anz FROM category", 0, connection, statement);
+        resultRows = stmts.performDatabaseOperation("SELECT COUNT( b.idborrowed ) as anz FROM borrowed b JOIN student s ON b.idstudent = s.idstudent JOIN leihobjekt l ON b.idlendingobject = l.idleihobjekt WHERE b.idlendingobject = (SELECT idleihobjekt FROM leihobjekt WHERE scancode = \"7350049926353\")  AND b.isback = 0;", 0, connection, statement);
 
-        String[] ListItemSource = null;
+        Ausleihe[] ListItemSource = null;
 
         try {
             if (resultRows != null) {
@@ -48,7 +56,7 @@ public class ListAnnahme extends AppCompatActivity {
                 try {
 
                     while (resultRows.next()) {
-                        ListItemSource = new String[resultRows.getInt("anz")];
+                        ListItemSource = new Ausleihe[resultRows.getInt("anz")];
 
                     }
                 } catch (Exception exception) {
@@ -66,14 +74,18 @@ public class ListAnnahme extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }
-            result = stmts.performDatabaseOperation("SELECT title, idcategory FROM category", 0, connection, statement);
+            result = stmts.performDatabaseOperation("SELECT b.idborrowed, b.starttime, l.description, s.lastname, s.firstname FROM borrowed b JOIN student s ON b.idstudent = s.idstudent JOIN leihobjekt l ON b.idlendingobject = l.idleihobjekt WHERE b.idlendingobject = (SELECT idleihobjekt FROM leihobjekt WHERE scancode =" + scancode + ")  AND b.isback = 0;", 0, connection, statement);
             try {
                 if (result != null) {
 
                     try {
                         int i = 0;
                         while (result.next()) {
-                            ListItemSource[i] = result.getString("idcategory") + " " + result.getString("title");
+                            String dateString = result.getString("starttime");
+                            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+                            LocalDateTime localDateTime = LocalDateTime.parse(dateString, formatter);
+
+                            ListItemSource[i] = new Ausleihe(result.getString("firstname"), result.getString("lastname"), result.getString("description"), localDateTime, Integer.valueOf(result.getString("idborrowed")));
                             i++;
                         }
                     } catch (Exception exception) {
@@ -109,7 +121,7 @@ public class ListAnnahme extends AppCompatActivity {
                 }
 
 
-                ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, ListItemSource);
+                ArrayAdapter<Ausleihe> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, ListItemSource);
                 lvBorrowed.setAdapter(adapter);
             }
         }
@@ -122,6 +134,19 @@ public class ListAnnahme extends AppCompatActivity {
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void onClick(View view) {
+
+        if(this.lvBorrowed.getSelectedItem() == null){
+            Toast.makeText(this, "Bitte wählen Sie ein Objekt aus", Toast.LENGTH_LONG).show();
+        }else{
+            Ausleihe a = (Ausleihe) this.lvBorrowed.getSelectedItem();
+            Intent intent = new Intent(this, AnnahmeView.class);
+            intent.putExtra("idborrowed", a.getBorrowedid());
+            startActivity(intent);
         }
     }
 }
