@@ -71,7 +71,8 @@ public class AnnahmeView extends AppCompatActivity implements View.OnClickListen
 
 
         setDBAccess();
-        setTxtTitle(connection, statement);
+        //setTxtTitle(connection, statement);
+        tvAusgabe.setText(borrowedid);
         setDBAccess();
         try {
             setSpinnerClass(connection, statement);

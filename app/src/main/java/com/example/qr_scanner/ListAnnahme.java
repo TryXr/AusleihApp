@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -21,12 +22,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class ListAnnahme extends AppCompatActivity implements View.OnClickListener {
+public class ListAnnahme extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
     MySQLStatements stmts = new MySQLStatements();
     Connection connection = null;
     Statement statement = null;
-    Button btnAuswählen;
     ListView lvBorrowed;
 
     String scancode, teacherid;
@@ -35,11 +35,10 @@ public class ListAnnahme extends AppCompatActivity implements View.OnClickListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_annahme);
         setDBAccess();
-        btnAuswählen = findViewById(R.id.btnAuswählen);
-        btnAuswählen.setOnClickListener(this);
         lvBorrowed = findViewById(R.id.lvBorrowed);
         scancode = getIntent().getStringExtra("code");
         teacherid = getIntent().getStringExtra("teacherid");
+        lvBorrowed.setOnItemClickListener(this);
         setItemSource();
 
     }
@@ -83,8 +82,9 @@ public class ListAnnahme extends AppCompatActivity implements View.OnClickListen
                         int i = 0;
                         while (result.next()) {
                             String dateString = result.getString("starttime");
+                            String subDateString = dateString.substring(0, 19);
                             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-                            LocalDateTime localDateTime = LocalDateTime.parse(dateString, formatter);
+                            LocalDateTime localDateTime = LocalDateTime.parse(subDateString, formatter);
 
                             ListItemSource[i] = new Ausleihe(result.getString("firstname"), result.getString("lastname"), result.getString("description"), localDateTime, Integer.valueOf(result.getString("idborrowed")));
                             i++;
@@ -139,17 +139,12 @@ public class ListAnnahme extends AppCompatActivity implements View.OnClickListen
     }
 
     @Override
-    public void onClick(View view) {
-
-        if(this.lvBorrowed.getSelectedItem() == null){
-            Toast.makeText(this, "Bitte wählen Sie ein Objekt aus", Toast.LENGTH_LONG).show();
-        }else{
-            Ausleihe a = (Ausleihe) this.lvBorrowed.getSelectedItem();
-            Intent intent = new Intent(this, AnnahmeView.class);
-            intent.putExtra("idborrowed", a.getBorrowedid());
-            intent.putExtra("code", scancode);
-            intent.putExtra("teacherid", teacherid);
-            startActivity(intent);
-        }
+    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+        Ausleihe a = (Ausleihe) adapterView.getItemAtPosition(i);
+        Intent intent = new Intent(this, AnnahmeView.class);
+        intent.putExtra("idborrowed", String.valueOf(a.getBorrowedid()));
+        intent.putExtra("code", scancode);
+        intent.putExtra("teacherid", teacherid);
+        startActivity(intent);
     }
 }
