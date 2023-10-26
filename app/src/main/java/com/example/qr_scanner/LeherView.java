@@ -124,7 +124,7 @@ public class LeherView extends AppCompatActivity {
 
     private void startAnnahme() {
 
-        Intent intent = new Intent(this, AnnahmeView.class);
+        Intent intent = new Intent(this, ListAnnahme.class);
         intent.putExtra("code", code);
         intent.putExtra("teacherid", getIntent().getStringExtra("teacherid"));
         startActivity(intent);

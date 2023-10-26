@@ -26,7 +26,7 @@ import java.time.format.DateTimeFormatter;
 
 public class AnnahmeView extends AppCompatActivity implements View.OnClickListener {
 
-    String code, teacherid;
+    String code, teacherid, borrowedid;
     Spinner spinnerClass, spinnerStudent;
     CheckBox cbDamaged;
     TextView tvAusgabe, tvDamaged;
@@ -44,6 +44,7 @@ public class AnnahmeView extends AppCompatActivity implements View.OnClickListen
         setContentView(R.layout.activity_annahme_view);
         code = getIntent().getStringExtra("code");
         teacherid = getIntent().getStringExtra("teacherid");
+        borrowedid = getIntent().getStringExtra("borrowedid");
         etDamaged = findViewById(R.id.etDamaged);
         spinnerClass = findViewById(R.id.spinnerClass);
         spinnerStudent = findViewById(R.id.spinnerStudent);
