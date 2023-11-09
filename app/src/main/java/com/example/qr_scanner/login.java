@@ -8,7 +8,11 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -37,14 +41,12 @@ MySQLStatements stmts = new MySQLStatements();
     @Override
     public void onClick(View view) {
 
-        // Hier wird dann die Berechtigung per DB ausgelesen 1 = Lehrer 0 = Schüler
         MySQLStatements statements = new MySQLStatements();
         setDBAccess();
         int dbGetZugriff = 1;
-
         ResultSet result = null;
-
-        result = stmts.performDatabaseOperation("SELECT * FROM user WHERE username ='" + txtBname.getText().toString() + "' AND password='" +txtPwd.getText().toString() + "'", 0, connection, statement);
+        String pwdd = md5(txtPwd.getText().toString());
+        result = stmts.performDatabaseOperation("SELECT * FROM user WHERE username ='" + txtBname.getText().toString() + "' AND password='" + md5(txtPwd.getText().toString()) + "'", 0, connection, statement);
 
         try {
             if(result != null) {
@@ -54,6 +56,8 @@ MySQLStatements stmts = new MySQLStatements();
                         intent.putExtra("zugriff", dbGetZugriff);
                         intent.putExtra("teacherid", result.getString("idteacher"));
                         startActivity(intent);
+                    }else{
+                        Toast.makeText(this, "Falsches Passwort", Toast.LENGTH_LONG).show();
                     }
 
                 }catch (Exception e){
@@ -99,5 +103,22 @@ MySQLStatements stmts = new MySQLStatements();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static String md5(final String s) {
+            final MessageDigest sha512;
+            try {
+                sha512 = MessageDigest.getInstance("SHA-512");
+            } catch (NoSuchAlgorithmException e) {
+                return "404";
+            }
+            sha512.update(s.getBytes());
+            byte byteData[] = sha512.digest();
+            StringBuffer sb = new StringBuffer();
+            for (int i = 0; i < byteData.length; i++) {
+                sb.append(Integer.toString((byteData[i] & 0xff) + 0x100, 16).substring(1));
+            }
+            return sb.toString();
+
     }
 }
