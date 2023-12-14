@@ -157,7 +157,12 @@ public class LeherView extends AppCompatActivity {
         builder.setPositiveButton("Ja", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 setDBAccess();
-                stmts.performDatabaseOperation("UPDATE leihobjekt SET quantity = quantity -1 WHERE scancode=" + code, 1, connection, statement);
+                AusgabeView a = new AusgabeView();
+                int menge = a.getMenge();
+                if(menge >= 0){
+                    stmts.performDatabaseOperation("UPDATE leihobjekt SET quantity = quantity -1 WHERE scancode=" + code, 1, connection, statement);
+                }
+
                 dialog.dismiss(); // Close the dialog
             }
         });
@@ -181,5 +186,11 @@ public class LeherView extends AppCompatActivity {
             throw new RuntimeException(e);
         }
     }
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent(this, ScannerKlasse.class);
 
+        startActivity(intent);
+    }
 }

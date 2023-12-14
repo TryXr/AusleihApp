@@ -191,6 +191,8 @@ public class NewObjectView extends AppCompatActivity implements View.OnClickList
             try {
                 stmts.performDatabaseOperation("INSERT INTO leihobjekt VALUES("+ "null"+ ", " + code + ", " + "'"  + etDescription.getText().toString() + "'" + ", " + qnty + ", " + categorys[0] + ")" , 1, connection, statement);
                 Toast.makeText(this, "Neue Medien wurden in der Datenbank hinzugefügt", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(this, ScannerKlasse.class);
+                startActivity(intent);
             } catch (Exception e) {
                 Log.e("Error: ", e.getMessage());
             }finally {

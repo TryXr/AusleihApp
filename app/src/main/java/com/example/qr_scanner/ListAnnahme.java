@@ -45,6 +45,7 @@ public class ListAnnahme extends AppCompatActivity implements AdapterView.OnItem
 
     private void setItemSource() {
         ResultSet result = null;
+        ArrayList<Ausleihe> aList = new ArrayList<>();
         ResultSet resultRows = null;
         resultRows = stmts.performDatabaseOperation("SELECT COUNT( b.idborrowed ) as anz FROM borrowed b JOIN student s ON b.idstudent = s.idstudent JOIN leihobjekt l ON b.idlendingobject = l.idleihobjekt WHERE b.idlendingobject = (SELECT idleihobjekt FROM leihobjekt WHERE scancode = \"7350049926353\")  AND b.isback = 0;", 0, connection, statement);
 
@@ -86,7 +87,8 @@ public class ListAnnahme extends AppCompatActivity implements AdapterView.OnItem
                             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
                             LocalDateTime localDateTime = LocalDateTime.parse(subDateString, formatter);
 
-                            ListItemSource[i] = new Ausleihe(result.getString("firstname"), result.getString("lastname"), result.getString("description"), localDateTime, Integer.valueOf(result.getString("idborrowed")));
+//ListItemSource[i]
+                            aList.add(new Ausleihe(result.getString("firstname"), result.getString("lastname"), result.getString("description"), localDateTime, Integer.valueOf(result.getString("idborrowed"))));
                             i++;
                         }
                     } catch (Exception exception) {
@@ -122,7 +124,7 @@ public class ListAnnahme extends AppCompatActivity implements AdapterView.OnItem
                 }
 
 
-                ArrayAdapter<Ausleihe> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, ListItemSource);
+                ArrayAdapter<Ausleihe> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, aList);
                 lvBorrowed.setAdapter(adapter);
             }
         }

@@ -188,7 +188,7 @@ public class BearbeitenView extends AppCompatActivity implements View.OnClickLis
 
         try {
             stmts.performDatabaseOperation("UPDATE leihobjekt SET description =" + "'" + etDescription.getText() + "'," + " quantity =" + qnty + ", idcategory = " + categorys[0] + " WHERE scancode = " + code, 1, connection,statement);
-            Toast.makeText(this, "Neue Medien wurden in der Datenbank hinzugefügt", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Medien wurden in der Datenbank geändert", Toast.LENGTH_SHORT).show();
         } catch (Exception e) {
             Log.e("Error: ", e.getMessage());
         }finally {
