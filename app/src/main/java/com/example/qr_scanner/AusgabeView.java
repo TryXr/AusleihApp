@@ -350,7 +350,7 @@ public class AusgabeView extends AppCompatActivity implements View.OnClickListen
             setDBAccess();
             try {
                 if (menge>=1) {
-                stmts.performDatabaseOperation("INSERT INTO borrowed VALUES(" + "null" + ", " + tid + stundentselect + leihselect + ", 0, " + "'" + currentTimeStamp + ",null" +"')", 1, connection, statement);
+                stmts.performDatabaseOperation("INSERT INTO borrowed VALUES(" + "null" + ", " + tid + stundentselect + leihselect + ", 0, " + "'" + currentTimeStamp + "'" + ",null)", 1, connection, statement);
                 Toast.makeText(this, "Ausleihe wurde in der Datenbank hinzugefügt", Toast.LENGTH_SHORT).show();
                 }
                 else

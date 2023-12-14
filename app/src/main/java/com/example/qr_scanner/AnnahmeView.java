@@ -139,7 +139,9 @@ public class AnnahmeView extends AppCompatActivity implements View.OnClickListen
             stmts.performDatabaseOperation(update, 1, connection, statement);
             if (stmts.rows == 1) {
                 Toast.makeText(this, "Ausleihe wurde zurückgegeben", Toast.LENGTH_LONG).show();
-
+                Intent intent = new Intent(this, LeherView.class);
+                intent.putExtra("code",code);
+                startActivity(intent);
             } else {
                 Toast.makeText(this, "Keine Ausleihe wurde zu dieser Person gefunden", Toast.LENGTH_LONG).show();
             }
