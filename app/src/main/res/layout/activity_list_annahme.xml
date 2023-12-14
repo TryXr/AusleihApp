@@ -20,7 +20,7 @@
             android:id="@+id/tvTitle"
             app:layout_constraintBottom_toTopOf="@id/lvBorrowed"
             app:layout_constraintTop_toTopOf="parent"
-            android:text="Liste aller Medien des Schülers"
+            android:text="Liste aller Schüler die das Medium ausgeliehen haben"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintHorizontal_weight="1"

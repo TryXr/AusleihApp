@@ -141,6 +141,7 @@ public class AnnahmeView extends AppCompatActivity implements View.OnClickListen
                 Toast.makeText(this, "Ausleihe wurde zurückgegeben", Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(this, LeherView.class);
                 intent.putExtra("code",code);
+                intent.putExtra("teacherid",teacherid);
                 startActivity(intent);
             } else {
                 Toast.makeText(this, "Keine Ausleihe wurde zu dieser Person gefunden", Toast.LENGTH_LONG).show();
