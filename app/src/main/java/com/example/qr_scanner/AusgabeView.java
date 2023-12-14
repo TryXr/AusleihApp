@@ -350,7 +350,7 @@ public class AusgabeView extends AppCompatActivity implements View.OnClickListen
             setDBAccess();
             try {
                 if (menge>=1) {
-                stmts.performDatabaseOperation("INSERT INTO borrowed VALUES(" + "null" + ", " + tid + stundentselect + leihselect + ", 0, " + "'" + currentTimeStamp + "')", 1, connection, statement);
+                stmts.performDatabaseOperation("INSERT INTO borrowed VALUES(" + "null" + ", " + tid + stundentselect + leihselect + ", 0, " + "'" + currentTimeStamp + ",null" +"')", 1, connection, statement);
                 Toast.makeText(this, "Ausleihe wurde in der Datenbank hinzugefügt", Toast.LENGTH_SHORT).show();
                 }
                 else
@@ -444,14 +444,14 @@ public class AusgabeView extends AppCompatActivity implements View.OnClickListen
                         if (menge>=studentLength.length) {
                             for (int i = 0; i < studentLength.length; i++) {
                                 String sid = studentLength[i];
-                                stmts.performDatabaseOperation("INSERT INTO borrowed VALUES(" + "null" + ", " + tid + ", " + sid + leihselect + ", 0, " + "'" + currentTimeStamp + "')", 1, connection, statement);
+                                stmts.performDatabaseOperation("INSERT INTO borrowed VALUES(" + "null" + ", " + tid + ", " + sid + leihselect + ", 0, " + "'" + currentTimeStamp + ",null" + "')", 1, connection, statement);
                             }
                             //stmts.performDatabaseOperation("UPDATE leihobjekt SET quantity = quantity -" + menge, 1, connection, statement);
                             Toast.makeText(this, "Ausleihe wurde für die Klasse hinzugefügt", Toast.LENGTH_SHORT).show();
                         }
                         else
                         {
-                            Toast.makeText(this, "Ausleihe ist nicht möglich", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(this, "Ausleihe ist nicht möglich, nicht genug Medien für alle Schüler", Toast.LENGTH_SHORT).show();
                         }
                     } catch (Exception exception) {
                         Log.e("Error: ", exception.getMessage());
