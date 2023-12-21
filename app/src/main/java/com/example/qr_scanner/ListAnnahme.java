@@ -147,7 +147,7 @@ public class ListAnnahme extends AppCompatActivity implements AdapterView.OnItem
         intent.putExtra("idborrowed", String.valueOf(a.getBorrowedid()));
         intent.putExtra("code", scancode);
         intent.putExtra("teacherid", teacherid);
-        intent.putExtra("studentName", a.getName() + a.getVname());
+        intent.putExtra("studentName", a.getName() + " " + a.getVname());
         startActivity(intent);
     }
 }

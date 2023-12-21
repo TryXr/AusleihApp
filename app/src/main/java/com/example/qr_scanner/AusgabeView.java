@@ -444,7 +444,7 @@ public class AusgabeView extends AppCompatActivity implements View.OnClickListen
                         if (menge>=studentLength.length) {
                             for (int i = 0; i < studentLength.length; i++) {
                                 String sid = studentLength[i];
-                                stmts.performDatabaseOperation("INSERT INTO borrowed VALUES(" + "null" + ", " + tid + ", " + sid + leihselect + ", 0, " + "'" + currentTimeStamp + ",null" + "')", 1, connection, statement);
+                                stmts.performDatabaseOperation("INSERT INTO borrowed VALUES(" + "null" + ", " + tid + ", " + sid + leihselect + ", 0, " + "'" + currentTimeStamp + "'" +",null" + ")", 1, connection, statement);
                             }
                             //stmts.performDatabaseOperation("UPDATE leihobjekt SET quantity = quantity -" + menge, 1, connection, statement);
                             Toast.makeText(this, "Ausleihe wurde für die Klasse hinzugefügt", Toast.LENGTH_SHORT).show();
@@ -482,7 +482,7 @@ public class AusgabeView extends AppCompatActivity implements View.OnClickListen
     public int getMenge() {
         setDBAccess();
         ResultSet result = null;
-        result = stmts.performDatabaseOperation("SELECT l.idleihobjekt,description, scancode, quantity - (SELECT count(idlendingobject) FROM borrowed b WHERE b.idlendingobject = l.idleihobjekt AND isback = 0) as quantity, title FROM leihobjekt l JOIN category ON category.idcategory = l.idcategory WHERE idleihobjekt=" + id, 3, connection, statement);
+        result = stmts.performDatabaseOperation("SELECT l.idleihobjekt,description, scancode, quantity - (SELECT count(idlendingobject) FROM borrowed b WHERE b.idlendingobject = l.idleihobjekt AND isback = 0) as quantity, title FROM leihobjekt l JOIN category ON category.idcategory = l.idcategory WHERE idleihobjekt= (SELECT idleihobjekt FROM leihobjekt WHERE scancode =" + code +")" , 3, connection, statement);
         int ret = 0;
         try {
             if (result != null) {

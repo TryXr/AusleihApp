@@ -16,7 +16,7 @@ public class MySQLStatements {
 
     public ResultSet performDatabaseOperation(String sql, int zgr, Connection connection, Statement statement) {
 
-
+        rows = 0;
         ResultSet resultSet = null;
 
         try {
@@ -35,8 +35,6 @@ public class MySQLStatements {
             {
                 rows = statement.executeUpdate(sql);
             }
-            //statement.close();
-            //connection.close();
 
         } catch (SQLException e) {
             e.printStackTrace();

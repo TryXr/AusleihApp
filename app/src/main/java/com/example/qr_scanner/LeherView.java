@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,9 +21,10 @@ public class LeherView extends AppCompatActivity {
 
     MySQLStatements stmts = new MySQLStatements();
     private String code;
-    String description;
+    String description, idleihobjekt;
     Statement statement;
     Connection connection;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,11 +47,12 @@ public class LeherView extends AppCompatActivity {
             throw new RuntimeException(e);
         }
 
-        ResultSet result = stmts.performDatabaseOperation("SELECT description FROM leihobjekt WHERE scancode=" + code, 0, connection, statement);
+        ResultSet result = stmts.performDatabaseOperation("SELECT description, idleihobjekt FROM leihobjekt WHERE scancode=" + code, 0, connection, statement);
 
         try {
             if (result != null && result.next()) {
                  description = result.getString("description");
+                 idleihobjekt = result.getString("idleihobjekt");
                 tvProdukt.setText(description);
             }else{
                 startNewObject();
@@ -157,10 +160,31 @@ public class LeherView extends AppCompatActivity {
         builder.setPositiveButton("Ja", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 setDBAccess();
-                AusgabeView a = new AusgabeView();
-                int menge = a.getMenge();
-                if(menge >= 0){
-                    stmts.performDatabaseOperation("UPDATE leihobjekt SET quantity = quantity -1 WHERE scancode=" + code, 1, connection, statement);
+                int menge = getMenge();
+                if(menge > 0){
+                        stmts.performDatabaseOperation("UPDATE leihobjekt SET quantity = quantity - 1 WHERE scancode = '" + code + "' AND idleihobjekt = " + idleihobjekt, 1, connection, statement);
+                   // stmts.performDatabaseOperation("UPDATE leihobjekt SET quantity = quantity -1 WHERE scancode=" + "'" + code + "'" +" AND idleihobjekt=" +  idleihobjekt, 1, connection, statement);
+                    try {
+                        connection.close();
+                    } catch (SQLException e) {
+                        throw new RuntimeException(e);
+                    }
+                    try {
+                        statement.close();
+                    } catch (SQLException e) {
+                        throw new RuntimeException(e);
+                    }
+
+                    if(stmts.rows >= 1) {
+                        Toast.makeText(LeherView.this, "Ein Medium wurde gelöscht", Toast.LENGTH_LONG).show();
+                    }
+                    else{
+                        Toast.makeText(LeherView.this, "SQL nicht funkationasdnfasfjas", Toast.LENGTH_LONG).show();
+                    }
+
+
+                }else{
+                    Toast.makeText(LeherView.this, "Es sind keine Medien mehr zum löschen", Toast.LENGTH_LONG).show();
                 }
 
                 dialog.dismiss(); // Close the dialog
@@ -192,5 +216,53 @@ public class LeherView extends AppCompatActivity {
         Intent intent = new Intent(this, ScannerKlasse.class);
 
         startActivity(intent);
+    }
+
+    public int getMenge() {
+        setDBAccess();
+        ResultSet result = null;
+        result = stmts.performDatabaseOperation("SELECT quantity - (SELECT count(idlendingobject) FROM borrowed b WHERE b.idlendingobject = l.idleihobjekt AND isback = 0) as quantity FROM leihobjekt l JOIN category ON category.idcategory = l.idcategory WHERE idleihobjekt= (SELECT idleihobjekt FROM leihobjekt WHERE scancode =" + code +")" , 3, connection, statement);
+        int ret = 0;
+        try {
+            if (result != null) {
+                try {
+                    if (result.next()) {
+                        ret = result.getInt("quantity");
+                    }
+
+                } catch (Exception e) {
+                    Log.e("Error: ", e.getMessage());
+                }
+            }
+        } catch (Exception e) {
+            Log.e("Error: ", e.getMessage());
+        } finally {
+            // ResultSet schließen
+            if (result != null) {
+                try {
+                    result.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+
+        return ret;
     }
 }
